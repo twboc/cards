@@ -36,7 +36,8 @@ interface CardProps {
   max_angle: number;
 }
 
-const HOLO_MASK_FLAG = true;
+const HOLO_MASK_FLAG = false;
+const HOLO_BACKGROUND_FLAG = false;
 
 const Card: FC<CardProps> = (props) => {
   const background = useImage(backgroundSource);
@@ -108,6 +109,45 @@ const Card: FC<CardProps> = (props) => {
                     width={props.width}
                     height={props.height}
                     fit="cover"
+                  />
+                </Mask>
+              )}
+              {HOLO_BACKGROUND_FLAG && (
+                <Mask
+                  mode="luminance"
+                  clip={false}
+                  mask={
+                    <>
+                      {/* full visible area */}
+                      <Rect
+                        x={0}
+                        y={0}
+                        width={props.width}
+                        height={props.height}
+                        color="white"
+                      />
+
+                      {/* cut the image shape out of the mask */}
+                      <Group layer={<Paint blendMode="dstOut" />}>
+                        <Image
+                          image={image}
+                          x={0}
+                          y={0}
+                          width={props.width}
+                          height={props.height}
+                          fit="contain"
+                        />
+                      </Group>
+                    </>
+                  }
+                >
+                  <Image
+                    image={holo_cover}
+                    x={0}
+                    y={0}
+                    width={props.width}
+                    height={props.height}
+                    fit={"fill"}
                   />
                 </Mask>
               )}
