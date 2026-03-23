@@ -1,14 +1,33 @@
 import React, { FC } from "react";
-import { View, StyleSheet, Image, ImageSourcePropType } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Image as ImageRN,
+  ImageSourcePropType,
+} from "react-native";
 import { GestureContainer } from "./gesture";
 import { FullCanvas } from "./canvas";
+import {
+  BlendColor,
+  Canvas,
+  ColorMatrix,
+  DataSourceParam,
+  Group,
+  Image,
+  Mask,
+  Paint,
+  Rect,
+  useAnimatedImageValue,
+  useImage,
+} from "@shopify/react-native-skia";
+import backgroundSource from "../assets/background/background.png";
 
 interface CardProps {
   showShaderBack: boolean;
   showImage: boolean;
   showHologram: boolean;
   showGloss: boolean;
-  source: ImageSourcePropType;
+  source: DataSourceParam;
   hologram: React.RefObject<number>;
   shader: React.RefObject<string>;
   screen_width: number;
@@ -17,7 +36,14 @@ interface CardProps {
   max_angle: number;
 }
 
+const HOLO_MASK_FLAG = true;
+
 const Card: FC<CardProps> = (props) => {
+  const background = useImage(backgroundSource);
+  const image = useImage(props.source);
+  const holo_cover = useAnimatedImageValue(
+    require("../assets/effect/holo_cover_02.gif"),
+  );
   return (
     <View
       style={[
@@ -45,18 +71,47 @@ const Card: FC<CardProps> = (props) => {
             hologramMaskSource={props.hologram.current}
             shader={props.shader}
           >
-            {props.showImage && (
-              <>
+            <Canvas style={styles.canvas}>
+              {/* <Image
+                image={background}
+                width={props.width + 0}
+                height={props.height}
+                fit={"cover"}
+              /> */}
+
+              {props.showImage && (
                 <Image
-                  source={props.source}
-                  style={{
-                    width: props.width,
-                    height: props.height,
-                    resizeMode: "contain",
-                  }}
+                  image={image}
+                  width={props.width}
+                  height={props.height}
                 />
-              </>
-            )}
+              )}
+              {HOLO_MASK_FLAG && (
+                <Mask
+                  mode={"luminance"}
+                  clip={false}
+                  mask={
+                    <Image
+                      image={image}
+                      x={0}
+                      y={0}
+                      width={props.width}
+                      height={props.height}
+                      fit="contain"
+                    />
+                  }
+                >
+                  <Image
+                    image={holo_cover}
+                    x={0}
+                    y={0}
+                    width={props.width}
+                    height={props.height}
+                    fit="cover"
+                  />
+                </Mask>
+              )}
+            </Canvas>
           </FullCanvas>
         )}
       </GestureContainer>
@@ -71,4 +126,5 @@ const styles = StyleSheet.create({
     paddingTop: 30,
     alignItems: "center",
   },
+  canvas: { flex: 1 },
 });

@@ -345,7 +345,6 @@ export const FullCanvas = ({
           />
         )}
       </Canvas>
-
       {children}
       <Canvas
         pointerEvents="none"
