@@ -1,6 +1,10 @@
 ios/Pods/
 node_modules/
 ios/build/
+ios/cards.xcworkspace/**/*
+
+xcuserdata/
+*.xcuserstate
 
 # Xcode
 !**/*.xcodeproj
