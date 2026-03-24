@@ -1,27 +1,18 @@
 import React, { FC } from "react";
-import {
-  View,
-  StyleSheet,
-  Image as ImageRN,
-  ImageSourcePropType,
-} from "react-native";
+import { View, StyleSheet } from "react-native";
 import { GestureContainer } from "./gesture";
 import { FullCanvas } from "./canvas";
 import {
-  BlendColor,
   Canvas,
-  ColorMatrix,
   DataSourceParam,
-  Group,
   Image,
-  Mask,
-  Paint,
-  Rect,
   useAnimatedImageValue,
   useImage,
 } from "@shopify/react-native-skia";
 import backgroundSource from "../assets/background/background.png";
-
+import RGBSplit from "./rgbsplit";
+import ImageMask from "./imagemask";
+import ImageMaskReverse from "./imagemaskreverse";
 interface CardProps {
   showShaderBack: boolean;
   showImage: boolean;
@@ -36,6 +27,8 @@ interface CardProps {
   max_angle: number;
 }
 
+const BACKGROUND_FLAG = false;
+const RGB_SPLIT_FLAG = false;
 const HOLO_MASK_FLAG = false;
 const HOLO_BACKGROUND_FLAG = false;
 
@@ -73,12 +66,14 @@ const Card: FC<CardProps> = (props) => {
             shader={props.shader}
           >
             <Canvas style={styles.canvas}>
-              {/* <Image
-                image={background}
-                width={props.width + 0}
-                height={props.height}
-                fit={"cover"}
-              /> */}
+              {BACKGROUND_FLAG && (
+                <Image
+                  image={background}
+                  width={props.width + 0}
+                  height={props.height}
+                  fit={"cover"}
+                />
+              )}
 
               {props.showImage && (
                 <Image
@@ -87,69 +82,29 @@ const Card: FC<CardProps> = (props) => {
                   height={props.height}
                 />
               )}
+
+              {RGB_SPLIT_FLAG && (
+                <RGBSplit
+                  image={image}
+                  width={props.width}
+                  height={props.height}
+                />
+              )}
               {HOLO_MASK_FLAG && (
-                <Mask
-                  mode={"luminance"}
-                  clip={false}
-                  mask={
-                    <Image
-                      image={image}
-                      x={0}
-                      y={0}
-                      width={props.width}
-                      height={props.height}
-                      fit="contain"
-                    />
-                  }
-                >
-                  <Image
-                    image={holo_cover}
-                    x={0}
-                    y={0}
-                    width={props.width}
-                    height={props.height}
-                    fit="cover"
-                  />
-                </Mask>
+                <ImageMask
+                  image={image}
+                  mask={holo_cover}
+                  width={props.width}
+                  height={props.height}
+                />
               )}
               {HOLO_BACKGROUND_FLAG && (
-                <Mask
-                  mode="luminance"
-                  clip={false}
-                  mask={
-                    <>
-                      {/* full visible area */}
-                      <Rect
-                        x={0}
-                        y={0}
-                        width={props.width}
-                        height={props.height}
-                        color="white"
-                      />
-
-                      {/* cut the image shape out of the mask */}
-                      <Group layer={<Paint blendMode="dstOut" />}>
-                        <Image
-                          image={image}
-                          x={0}
-                          y={0}
-                          width={props.width}
-                          height={props.height}
-                          fit="contain"
-                        />
-                      </Group>
-                    </>
-                  }
-                >
-                  <Image
-                    image={holo_cover}
-                    x={0}
-                    y={0}
-                    width={props.width}
-                    height={props.height}
-                    fit={"fill"}
-                  />
-                </Mask>
+                <ImageMaskReverse
+                  image={image}
+                  mask={holo_cover}
+                  width={props.width}
+                  height={props.height}
+                />
               )}
             </Canvas>
           </FullCanvas>
