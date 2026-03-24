@@ -25,6 +25,7 @@ import {
 } from "@shopify/react-native-skia";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { GestureContainerMotion } from "./gesture";
+import { BackgrdoundShader } from "./backgroundShader";
 
 interface FullCanvasProps {
   showShaderBack: boolean;
@@ -47,46 +48,6 @@ const zeroShared = {
 
 const TARGET_FPS = 30;
 const FRAME_DURATION = 1000 / TARGET_FPS;
-
-interface CanvasBackgroundProps {
-  width: number;
-  height: number;
-  borderRadius: number;
-  shaderEffectRef: React.RefObject<SkRuntimeEffect | null>;
-  time: number;
-  children?: ReactNode;
-}
-
-export const BackgrdoundShader: FC<CanvasBackgroundProps> = (props) => {
-  if (props.shaderEffectRef.current == null) {
-    return <></>;
-  }
-  return (
-    <Mask
-      mode="alpha"
-      mask={
-        <RoundedRect
-          x={0}
-          y={0}
-          r={props.borderRadius}
-          width={props.width}
-          height={props.height}
-          color="white"
-        />
-      }
-    >
-      <Fill>
-        <Shader
-          source={props.shaderEffectRef.current}
-          uniforms={{
-            iTime: props.time,
-            iResolution: [props.width, props.height],
-          }}
-        />
-      </Fill>
-    </Mask>
-  );
-};
 
 export const FullCanvas = ({
   showShaderBack,
