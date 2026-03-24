@@ -12,6 +12,7 @@ import { SharedValue } from "react-native-reanimated";
 interface ImageMaskReverseProps {
   image: SkImage | SharedValue<SkImage | null> | null;
   mask: SkImage | SharedValue<SkImage | null> | null;
+  mode?: "luminance" | "alpha";
   width: number;
   height: number;
 }
@@ -19,7 +20,7 @@ interface ImageMaskReverseProps {
 const ImageMaskReverse: FC<ImageMaskReverseProps> = (props) => {
   return (
     <Mask
-      mode="luminance"
+      mode={props.mode || "alpha"}
       clip={false}
       mask={
         <>

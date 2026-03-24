@@ -5,6 +5,7 @@ import { SharedValue } from "react-native-reanimated";
 interface ImageMaskProps {
   image: SkImage | SharedValue<SkImage | null> | null;
   mask: SkImage | SharedValue<SkImage | null> | null;
+  mode?: "luminance" | "alpha";
   width: number;
   height: number;
 }
@@ -12,7 +13,7 @@ interface ImageMaskProps {
 const ImageMask: FC<ImageMaskProps> = (props) => {
   return (
     <Mask
-      mode={"luminance"}
+      mode={props.mode || "alpha"}
       clip={false}
       mask={
         <Image
@@ -31,7 +32,7 @@ const ImageMask: FC<ImageMaskProps> = (props) => {
         y={0}
         width={props.width}
         height={props.height}
-        fit="cover"
+        fit="fill"
       />
     </Mask>
   );
