@@ -31,7 +31,7 @@ interface CardProps {
 const BACKGROUND_FLAG = false;
 const OUTLINE_FLAG = true;
 const RGB_SPLIT_FLAG = false;
-const HOLO_MASK_FLAG = true;
+const HOLO_MASK_FLAG = false;
 const HOLO_BACKGROUND_FLAG = false;
 
 const Card: FC<CardProps> = (props) => {
@@ -84,6 +84,20 @@ const Card: FC<CardProps> = (props) => {
                   height={props.height}
                 />
               )}
+
+              <ImageMask
+                image={holo_cover}
+                mask={
+                  <Outline
+                    image={image}
+                    width={props.width}
+                    height={props.height}
+                  />
+                }
+                width={props.width}
+                height={props.height}
+                mode={"luminance"}
+              />
 
               {props.showImage && (
                 <Image
