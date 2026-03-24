@@ -13,6 +13,7 @@ import backgroundSource from "../assets/background/background.png";
 import RGBSplit from "./rgbsplit";
 import ImageMask from "./imagemask";
 import ImageMaskReverse from "./imagemaskreverse";
+import { Outline } from "./outline";
 interface CardProps {
   showShaderBack: boolean;
   showImage: boolean;
@@ -28,6 +29,7 @@ interface CardProps {
 }
 
 const BACKGROUND_FLAG = false;
+const OUTLINE_FLAG = true;
 const RGB_SPLIT_FLAG = false;
 const HOLO_MASK_FLAG = true;
 const HOLO_BACKGROUND_FLAG = false;
@@ -72,6 +74,14 @@ const Card: FC<CardProps> = (props) => {
                   width={props.width + 0}
                   height={props.height}
                   fit={"cover"}
+                />
+              )}
+
+              {OUTLINE_FLAG && (
+                <Outline
+                  image={image}
+                  width={props.width}
+                  height={props.height}
                 />
               )}
 

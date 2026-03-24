@@ -1,6 +1,5 @@
 import {
   AnimatedProp,
-  Canvas,
   Fit,
   Group,
   Image,
@@ -11,7 +10,7 @@ import {
 } from "@shopify/react-native-skia";
 
 type Props = {
-  image: SkImage;
+  image: SkImage | null;
   width: number;
   height: number;
   fit?: AnimatedProp<Fit>;
