@@ -11,23 +11,22 @@ interface ImageMaskProps {
 }
 
 const ImageMask: FC<ImageMaskProps> = (props) => {
+  const mask = React.isValidElement(props.mask) ? (
+    props.mask
+  ) : (
+    <Image
+      image={props.mask}
+      x={0}
+      y={0}
+      width={props.width}
+      height={props.height}
+      fit="contain"
+    />
+  );
   return (
-    <Mask
-      mode={props.mode || "alpha"}
-      clip={false}
-      mask={
-        <Image
-          image={props.image}
-          x={0}
-          y={0}
-          width={props.width}
-          height={props.height}
-          fit="contain"
-        />
-      }
-    >
+    <Mask mode={props.mode || "alpha"} clip={false} mask={mask}>
       <Image
-        image={props.mask}
+        image={props.image}
         x={0}
         y={0}
         width={props.width}

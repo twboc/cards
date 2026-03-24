@@ -1,7 +1,5 @@
 import {
-  FC,
   PropsWithChildren,
-  ReactNode,
   useCallback,
   useEffect,
   useMemo,
@@ -12,15 +10,12 @@ import { SharedValue, useDerivedValue } from "react-native-reanimated";
 import {
   Canvas,
   DataSourceParam,
-  Fill,
   Group,
   Image,
   LinearGradient,
   Mask,
   RoundedRect,
-  Shader,
   Skia,
-  SkRuntimeEffect,
   useImage,
 } from "@shopify/react-native-skia";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";

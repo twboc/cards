@@ -102,8 +102,8 @@ const Card: FC<CardProps> = (props) => {
               )}
               {HOLO_MASK_FLAG && (
                 <ImageMask
-                  image={image}
-                  mask={holo_cover}
+                  image={holo_cover}
+                  mask={image}
                   width={props.width}
                   height={props.height}
                   mode={"luminance"}
