@@ -1,6 +1,9 @@
 import { SharedValue } from "react-native-reanimated";
 import { GradientPoints } from "../type/type";
 
+export const MODAL_HEIGHT = "50%";
+export const MODAL_BOTTOM_PADDING = 60;
+
 export const zeroShared = {
   value: 0,
 } as SharedValue<number>;
