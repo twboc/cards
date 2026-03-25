@@ -34,10 +34,17 @@ import { RainRipplesShader } from "../assets/shader/RainRippleShader";
 import { SmokeShader } from "../assets/shader/SmokeShader";
 import { SynthwaveSunGridShader } from "../assets/shader/SynthWaveSunGrid";
 import { TronGridHorizonShader } from "../assets/shader/TronGridHorizonShader";
+import { LogoWaveShaderCentered } from "../assets/shader/LogoWaveShader";
+import { FracturePolyShader } from "../assets/shader/FracturePolyShader";
+import { SynthwaveTerrainShader } from "../assets/shader/SynthWaveTerrainShader";
+import { PinkWarpShader } from "../assets/shader/PinkWarpShader";
 
 export const SHADER_OPTIONS = [
+  { label: "Abstract Shine", value: AbstractShineShader },
   { label: "Aurora Wave", value: AuroraWaveShader },
+  { label: "Cold Strands", value: ColdStrandsShader },
   { label: "Crystal Bloom", value: CrystalBloomShader },
+  { label: "Fracture Poly", value: FracturePolyShader },
   { label: "Holo Cosmic Galaxy", value: HoloCosmicGalaxyShader },
   { label: "Holo Prism Burst", value: HoloPrismBurstShader },
   { label: "Holo Rainbow Foil", value: HoloRainbowFoilShader },
@@ -48,10 +55,13 @@ export const SHADER_OPTIONS = [
   { label: "Kanagawa Wave", value: KanagawaWaveShader },
   { label: "Liquid Metal", value: LiquidMetalShader },
   { label: "Liquid Metal Colour", value: LiquidMetalColourShader },
+  { label: "Logo Wave", value: LogoWaveShaderCentered },
   { label: "LSD", value: LSDShader },
   { label: "Rain Ripples", value: RainRipplesShader },
+  { label: "Pink Warp", value: PinkWarpShader },
   { label: "Smoke", value: SmokeShader },
   { label: "Synthwave Sun Grid", value: SynthwaveSunGridShader },
+  { label: "Synthwave Terrain", value: SynthwaveTerrainShader },
   { label: "Tron Grid Horizon", value: TronGridHorizonShader },
 ] as const;
 
@@ -74,6 +84,8 @@ import squirtle from "./../assets/pokemon/squirtle.png";
 import totodile from "./../assets/pokemon/totodile.png";
 import vaporeon from "./../assets/pokemon/vaporeon.png";
 import { Color } from "@shopify/react-native-skia";
+import { AbstractShineShader } from "../assets/shader/AbstractShineShader";
+import { ColdStrandsShader } from "../assets/shader/ColdStrandsShader";
 
 export const POKEMON_OPTIONS = [
   { label: "Bulbasaur", value: bulbasaur },

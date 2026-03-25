@@ -13,6 +13,8 @@ import backgroundSource from "../assets/background/background.png";
 import HoloColver02 from "../assets/effect/holo_cover_02.gif";
 
 interface CardProps {
+  perfMonitor: boolean;
+
   showShaderBack: boolean;
   showImage: boolean;
   showHologram: boolean;
@@ -59,6 +61,7 @@ const Card: FC<CardProps> = (props) => {
       >
         {(motion) => (
           <FullCanvas
+            perfMonitor={props.perfMonitor}
             showImage={props.showImage}
             showShaderBack={props.showShaderBack}
             showHologram={props.showHologram}

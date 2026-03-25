@@ -38,6 +38,8 @@ const Cards = () => {
   const HEIGHT = WIDTH * 1.4;
   const MAX_ANGLE = 10;
 
+  const [perfMonitor, setPerfMonitor] = useState(false);
+
   const [showShaderBack, setShowShaderBack] = useState(true);
   const [showImage, setShowImage] = useState(true);
   const [showHologram, setShowHologram] = useState(true);
@@ -80,6 +82,9 @@ const Cards = () => {
     () => ({ current: selectedHoloColors }),
     [selectedHoloColors],
   );
+
+  const togglePerfMonitor = () =>
+    setPerfMonitor((previousState) => !previousState);
 
   const toggleShowShaderBack = () =>
     setShowShaderBack((previousState) => !previousState);
@@ -220,6 +225,7 @@ const Cards = () => {
       <View style={styles.wrapper}>
         <Card
           key={`full-card-${activeIndex}-${activeCard.shader}-${activeCard.hologram}-${activeCard.source}`}
+          perfMonitor={perfMonitor}
           showShaderBack={showShaderBack}
           showImage={showImage}
           showHologram={showHologram}
@@ -266,6 +272,7 @@ const Cards = () => {
         <Controls
           visible={controlsVisible}
           onClose={() => setControlsVisible(false)}
+          perfMonitor={perfMonitor}
           showImage={showImage}
           showShaderBack={showShaderBack}
           showHologram={showHologram}
@@ -277,6 +284,7 @@ const Cards = () => {
           showRGBSplit={showRGBSplit}
           showHoloMask={showHoloMask}
           showHoloBackground={showHoloBackground}
+          onTogglePerfMonitor={togglePerfMonitor}
           onToggleImage={toggleShowImage}
           onToggleShaderBack={toggleShowShaderBack}
           onToggleHologram={toggleShowHologram}

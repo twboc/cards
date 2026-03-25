@@ -20,6 +20,7 @@ type ControlsModalProps = {
   visible: boolean;
   onClose: () => void;
 
+  perfMonitor: boolean;
   showImage: boolean;
   showShaderBack: boolean;
   showHologram: boolean;
@@ -32,6 +33,7 @@ type ControlsModalProps = {
   showHoloMask: boolean;
   showHoloBackground: boolean;
 
+  onTogglePerfMonitor: () => void;
   onToggleImage: () => void;
   onToggleShaderBack: () => void;
   onToggleHologram: () => void;
@@ -184,6 +186,12 @@ const ControlsModal = (props: ControlsModalProps) => {
             contentContainerStyle={styles.scrollContent}
             showsVerticalScrollIndicator={false}
           >
+            <ControlRow
+              label="Performance Monitor"
+              value={props.perfMonitor}
+              onValueChange={props.onTogglePerfMonitor}
+            />
+
             <SelectorDropdown
               label="Image"
               valueLabel={props.imageValueLabel}

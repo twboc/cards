@@ -8,6 +8,7 @@ import {
   Mask,
   RoundedRect,
   SkImage,
+  Transforms3d,
 } from "@shopify/react-native-skia";
 import HoloShine from "./holoShine";
 import { Point } from "../type/type";
@@ -24,18 +25,7 @@ export type HologramLayerProps = {
   borderRadius?: number;
   hologramMask: SkImage | null;
   holoColors: RefObject<HoloColorPalette>;
-  maskTransform: DerivedValue<
-    (
-      | {
-          translateX: number;
-          translateY?: undefined;
-        }
-      | {
-          translateY: number;
-          translateX?: undefined;
-        }
-    )[]
-  >;
+  maskTransform: DerivedValue<Transforms3d>;
   gradientPoints: DerivedValue<GradientPoints>;
 };
 

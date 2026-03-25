@@ -29,7 +29,7 @@ export type CardImageLayersProps = {
   showRGBSplit: boolean;
   showHoloMask: boolean;
 
-  gradientPoints: DerivedValue<GradientPoints>;
+  gradientPoints?: DerivedValue<GradientPoints>;
 };
 
 const IMAGE_FIT = "cover" as const;
@@ -76,7 +76,7 @@ function CardImageLayersComponent(props: CardImageLayersProps) {
         />
       )}
 
-      {props.showOutlineHolo && (
+      {props.showOutlineHolo && props.gradientPoints && (
         <ImageMask
           image={
             <HoloShine
