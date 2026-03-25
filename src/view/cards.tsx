@@ -40,6 +40,14 @@ const Cards = () => {
   const [showImage, setShowImage] = useState(true);
   const [showHologram, setShowHologram] = useState(true);
   const [showGloss, setShowGloss] = useState(true);
+
+  const [showBackground, setShowBackground] = useState(true);
+  const [showOutline, setShowOutline] = useState(true);
+  const [showOutlineMask, setShowOutlineMask] = useState(false);
+  const [showRGBSplit, setShowRGBSplit] = useState(true);
+  const [showHoloMask, setShowHoloMask] = useState(false);
+  const [showHoloBackground, setShowHoloBackground] = useState(false);
+
   const [controlsVisible, setControlsVisible] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -178,6 +186,12 @@ const Cards = () => {
           showImage={showImage}
           showHologram={showHologram}
           showGloss={showGloss}
+          showBackground={showBackground}
+          showOutline={showOutline}
+          showOutlineMask={showOutlineMask}
+          showRGBSplit={showRGBSplit}
+          showHoloMask={showHoloMask}
+          showHoloBackground={showHoloBackground}
           source={activeCard.source}
           hologram={hologramRef}
           shader={shaderRef}
@@ -186,7 +200,6 @@ const Cards = () => {
           height={HEIGHT}
           max_angle={MAX_ANGLE}
         />
-
         <View style={styles.bottomPanel}>
           <View style={styles.sliderWrap}>
             <FlatList

@@ -16,16 +16,32 @@ import {
   Mask,
   RoundedRect,
   Skia,
+  useAnimatedImageValue,
   useImage,
 } from "@shopify/react-native-skia";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { GestureContainerMotion } from "./gesture";
 import { BackgrdoundShader } from "./backgroundShader";
 
+import backgroundSource from "../assets/background/background.png";
+import RGBSplit from "./rgbsplit";
+import ImageMask from "./imagemask";
+import ImageMaskReverse from "./imagemaskreverse";
+import { Outline } from "./outline";
+import HoloColver02 from "../assets/effect/holo_cover_02.gif";
+
 interface FullCanvasProps {
   showShaderBack: boolean;
   showHologram: boolean;
   showGloss: boolean;
+
+  showBackground: boolean;
+  showOutline: boolean;
+  showOutlineMask: boolean;
+  showRGBSplit: boolean;
+  showHoloMask: boolean;
+  showHoloBackground: boolean;
+
   maxAngle?: number;
   width: number;
   height: number;
@@ -35,6 +51,7 @@ interface FullCanvasProps {
   motion?: GestureContainerMotion;
   isActive?: boolean;
   borderRadius?: number;
+  source: DataSourceParam;
 }
 
 const zeroShared = {
@@ -44,21 +61,22 @@ const zeroShared = {
 const TARGET_FPS = 30;
 const FRAME_DURATION = 1000 / TARGET_FPS;
 
-export const FullCanvas = ({
-  showShaderBack,
-  showHologram,
-  showGloss,
-  children,
-  maxAngle = 15,
-  width,
-  height,
-  style,
-  hologramMaskSource,
-  motion,
-  isActive = true,
-  borderRadius = 12,
-  shader,
-}: PropsWithChildren<FullCanvasProps>) => {
+const BACKGROUND_FLAG = true;
+const OUTLINE_FLAG = true;
+const OUTLINE_MASK_FLAG = false;
+const RGB_SPLIT_FLAG = true;
+const HOLO_MASK_FLAG = false;
+const HOLO_BACKGROUND_FLAG = false;
+
+export const FullCanvas = (props: PropsWithChildren<FullCanvasProps>) => {
+  const isActive = props.isActive || true;
+  const maxAngle = props.maxAngle || 15;
+  const borderRadius = props.borderRadius || 12;
+  const style = props.style || {};
+  const background = useImage(backgroundSource);
+  const image = useImage(props.source);
+  const holo_cover = useAnimatedImageValue(HoloColver02);
+
   const [time, setTime] = useState(0);
 
   const requestRef = useRef<number | null>(null);
@@ -66,16 +84,16 @@ export const FullCanvas = ({
   const lastFrameTimeRef = useRef(0);
   const startTimeRef = useRef(0);
 
-  const hologramMask = useImage(hologramMaskSource);
+  const hologramMask = useImage(props.hologramMaskSource);
 
-  const gestureRotateX = motion?.gestureRotateX ?? zeroShared;
-  const gestureRotateY = motion?.gestureRotateY ?? zeroShared;
-  const sensorRotateX = motion?.sensorRotateX ?? zeroShared;
-  const sensorRotateY = motion?.sensorRotateY ?? zeroShared;
-  const sensorTranslateX = motion?.sensorTranslateX ?? zeroShared;
-  const sensorTranslateY = motion?.sensorTranslateY ?? zeroShared;
+  const gestureRotateX = props.motion?.gestureRotateX ?? zeroShared;
+  const gestureRotateY = props.motion?.gestureRotateY ?? zeroShared;
+  const sensorRotateX = props.motion?.sensorRotateX ?? zeroShared;
+  const sensorRotateY = props.motion?.sensorRotateY ?? zeroShared;
+  const sensorTranslateX = props.motion?.sensorTranslateX ?? zeroShared;
+  const sensorTranslateY = props.motion?.sensorTranslateY ?? zeroShared;
 
-  const shaderEffectRef = useRef(Skia.RuntimeEffect.Make(shader.current));
+  const shaderEffectRef = useRef(Skia.RuntimeEffect.Make(props.shader.current));
 
   const totalRotateX = useDerivedValue(
     () => gestureRotateX.value + sensorRotateX.value,
@@ -89,23 +107,25 @@ export const FullCanvas = ({
 
   const gradientStart = useDerivedValue(() => ({
     x:
-      -width +
-      (width / 2 + (width / 2) * (totalRotateY.value / maxAngle)) +
+      -props.width +
+      (props.width / 2 + (props.width / 2) * (totalRotateY.value / maxAngle)) +
       sensorTranslateX.value * 0.35,
     y:
-      -height +
-      (height / 2 + (height / 2) * (totalRotateX.value / maxAngle)) +
+      -props.height +
+      (props.height / 2 +
+        (props.height / 2) * (totalRotateX.value / maxAngle)) +
       sensorTranslateY.value * 0.35,
   }));
 
   const gradientEnd = useDerivedValue(() => ({
     x:
-      width +
-      (width / 2 + (width / 2) * (totalRotateY.value / maxAngle)) +
+      props.width +
+      (props.width / 2 + (props.width / 2) * (totalRotateY.value / maxAngle)) +
       sensorTranslateX.value * 0.35,
     y:
-      height +
-      (height / 2 + (height / 2) * (totalRotateX.value / maxAngle)) +
+      props.height +
+      (props.height / 2 +
+        (props.height / 2) * (totalRotateX.value / maxAngle)) +
       sensorTranslateY.value * 0.35,
   }));
 
@@ -176,13 +196,13 @@ export const FullCanvas = ({
     () => [
       styles.container,
       {
-        width,
-        height,
-        borderRadius,
+        width: props.width,
+        height: props.height,
+        borderRadius: props.borderRadius,
       },
       style,
     ],
-    [width, height, borderRadius, style],
+    [props.width, props.height, borderRadius, style],
   );
 
   const childrenLayerStyle = useMemo(
@@ -190,22 +210,22 @@ export const FullCanvas = ({
       StyleSheet.absoluteFillObject,
       styles.childrenLayer,
       {
-        width,
-        height,
-        borderRadius,
+        width: props.width,
+        height: props.height,
+        borderRadius: props.borderRadius,
       },
     ],
-    [width, height, borderRadius],
+    [props.width, props.height, borderRadius],
   );
 
   if (!shaderEffectRef.current) {
-    return <View style={containerStyle}>{children}</View>;
+    return <View style={containerStyle}>{props.children}</View>;
   }
 
   if (!isActive) {
     return (
       <View style={containerStyle}>
-        <View style={childrenLayerStyle}>{children}</View>
+        <View style={childrenLayerStyle}>{props.children}</View>
       </View>
     );
   }
@@ -214,7 +234,13 @@ export const FullCanvas = ({
     <Group blendMode="overlay">
       <Mask
         mask={
-          <RoundedRect x={0} y={0} r={12} width={width} height={height}>
+          <RoundedRect
+            x={0}
+            y={0}
+            r={12}
+            width={props.width}
+            height={props.height}
+          >
             <LinearGradient
               start={gradientStart}
               end={gradientEnd}
@@ -234,13 +260,19 @@ export const FullCanvas = ({
         <Group transform={maskTransform}>
           <Image
             image={hologramMask}
-            width={width}
-            height={height}
+            width={props.width}
+            height={props.height}
             fit="cover"
           />
         </Group>
 
-        <RoundedRect x={0} y={0} r={17} width={width} height={height}>
+        <RoundedRect
+          x={0}
+          y={0}
+          r={17}
+          width={props.width}
+          height={props.height}
+        >
           <LinearGradient
             start={gradientStart}
             end={gradientEnd}
@@ -261,7 +293,7 @@ export const FullCanvas = ({
 
   const renderGlossLayer = () => {
     return (
-      <RoundedRect x={0} y={0} r={12} width={width} height={height}>
+      <RoundedRect x={0} y={0} r={12} width={props.width} height={props.height}>
         <LinearGradient
           start={gradientStart}
           end={gradientEnd}
@@ -285,40 +317,106 @@ export const FullCanvas = ({
         style={[
           StyleSheet.absoluteFill,
           {
-            width,
-            height,
+            width: props.width,
+            height: props.height,
           },
           style,
         ]}
       >
-        {showShaderBack && (
+        {props.showShaderBack && (
           <BackgrdoundShader
-            width={width}
-            height={height}
+            width={props.width}
+            height={props.height}
             borderRadius={borderRadius}
             time={time}
             shaderEffectRef={shaderEffectRef}
           />
         )}
       </Canvas>
-      {children}
+
+      <Canvas style={stylesimage.canvas}>
+        {HOLO_BACKGROUND_FLAG && (
+          <ImageMaskReverse
+            image={holo_cover}
+            mask={image}
+            width={props.width}
+            height={props.height}
+          />
+        )}
+
+        {BACKGROUND_FLAG && (
+          <Image
+            image={background}
+            width={props.width + 0}
+            height={props.height}
+            fit={"cover"}
+          />
+        )}
+
+        {OUTLINE_FLAG && (
+          <Outline image={image} width={props.width} height={props.height} />
+        )}
+
+        {OUTLINE_MASK_FLAG && (
+          <ImageMask
+            image={holo_cover}
+            mask={
+              <Outline
+                image={image}
+                width={props.width}
+                height={props.height}
+              />
+            }
+            width={props.width}
+            height={props.height}
+            mode={"luminance"}
+          />
+        )}
+
+        {/* {showImage && } */}
+        <Image image={image} width={props.width} height={props.height} />
+
+        {RGB_SPLIT_FLAG && (
+          <RGBSplit image={image} width={props.width} height={props.height} />
+        )}
+        {HOLO_MASK_FLAG && (
+          <ImageMask
+            image={holo_cover}
+            mask={image}
+            width={props.width}
+            height={props.height}
+            mode={"luminance"}
+          />
+        )}
+      </Canvas>
+      {props.children}
       <Canvas
         pointerEvents="none"
         style={[
           StyleSheet.absoluteFill,
           {
-            width,
-            height,
+            width: props.width,
+            height: props.height,
           },
           style,
         ]}
       >
-        {showHologram && hologramMaskSource && renderHologramLayer()}
-        {showGloss && renderGlossLayer()}
+        {props.showHologram &&
+          props.hologramMaskSource &&
+          renderHologramLayer()}
+        {props.showGloss && renderGlossLayer()}
       </Canvas>
     </>
   );
 };
+
+const stylesimage = StyleSheet.create({
+  centeredView: {
+    paddingTop: 30,
+    alignItems: "center",
+  },
+  canvas: { flex: 1 },
+});
 
 const styles = StyleSheet.create({
   container: {

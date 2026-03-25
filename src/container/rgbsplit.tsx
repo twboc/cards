@@ -1,6 +1,12 @@
 import React from "react";
-import { ColorMatrix, Group, Paint, Rect } from "@shopify/react-native-skia";
-import { Image as SkiaImage, Blur, Offset } from "@shopify/react-native-skia";
+import {
+  ColorMatrix,
+  Group,
+  Paint,
+  Image as SkiaImage,
+  Blur,
+  Offset,
+} from "@shopify/react-native-skia";
 
 type RGBSplitProps = {
   image: any; // SkImage
@@ -33,16 +39,33 @@ export const RGBSplit = ({
           <Paint blendMode="screen">
             <ColorMatrix
               matrix={[
-                1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.45, 0,
+                1,
+                0,
+                0,
+                0,
+                0, // R' = R
+                0,
+                0,
+                0,
+                0,
+                0, // G' = 0
+                0,
+                0,
+                0,
+                0,
+                0, // B' = 0
+                0,
+                0,
+                0,
+                0.45,
+                0, // A' = A * 0.45
               ]}
             />
             <Offset x={dx} y={0} />
           </Paint>
         }
       >
-        <Rect x={0} y={0} width={width} height={height}>
-          <SkiaImage image={image} width={width} height={height} />
-        </Rect>
+        <SkiaImage image={image} x={0} y={0} width={width} height={height} />
       </Group>
 
       {/* CYAN SPLIT */}
@@ -51,16 +74,33 @@ export const RGBSplit = ({
           <Paint blendMode="screen">
             <ColorMatrix
               matrix={[
-                0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0.35, 0,
+                0,
+                0,
+                0,
+                0,
+                0, // R' = 0
+                0,
+                1,
+                0,
+                0,
+                0, // G' = G
+                0,
+                0,
+                1,
+                0,
+                0, // B' = B
+                0,
+                0,
+                0,
+                0.35,
+                0, // A' = A * 0.35
               ]}
             />
             <Offset x={-dx} y={0} />
           </Paint>
         }
       >
-        <Rect x={0} y={0} width={width} height={height}>
-          <SkiaImage image={image} width={width} height={height} />
-        </Rect>
+        <SkiaImage image={image} x={0} y={0} width={width} height={height} />
       </Group>
 
       {/* SMEAR */}
@@ -71,15 +111,32 @@ export const RGBSplit = ({
             <Blur blur={1.2} mode="clamp" />
             <ColorMatrix
               matrix={[
-                1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0.16, 0,
+                1,
+                0,
+                0,
+                0,
+                0, // R' = R
+                0,
+                1,
+                0,
+                0,
+                0, // G' = G
+                0,
+                0,
+                1,
+                0,
+                0, // B' = B
+                0,
+                0,
+                0,
+                0.16,
+                0, // A' = A * 0.16
               ]}
             />
           </Paint>
         }
       >
-        <Rect x={0} y={0} width={width} height={height}>
-          <SkiaImage image={image} width={width} height={height} />
-        </Rect>
+        <SkiaImage image={image} x={0} y={0} width={width} height={height} />
       </Group>
     </>
   );

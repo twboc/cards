@@ -33,7 +33,7 @@ const ImageMaskReverse: FC<ImageMaskReverseProps> = (props) => {
           />
           <Group layer={<Paint blendMode="dstOut" />}>
             <Image
-              image={props.image}
+              image={props.mask}
               x={0}
               y={0}
               width={props.width}
@@ -45,7 +45,7 @@ const ImageMaskReverse: FC<ImageMaskReverseProps> = (props) => {
       }
     >
       <Image
-        image={props.mask}
+        image={props.image}
         x={0}
         y={0}
         width={props.width}
