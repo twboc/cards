@@ -59,14 +59,6 @@ const ImageMask: FC<ImageMaskProps> = (props) => {
   return (
     <Mask mode={props.mode || "alpha"} clip={false} mask={mask}>
       {image}
-      {/* <Image
-        image={props.image}
-        x={0}
-        y={0}
-        width={props.width}
-        height={props.height}
-        fit="fill"
-      /> */}
     </Mask>
   );
 };

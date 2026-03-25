@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, RefObject } from "react";
 import { DerivedValue } from "react-native-reanimated";
 import {
   Color,
@@ -10,17 +10,15 @@ import {
   SkImage,
 } from "@shopify/react-native-skia";
 import HoloShine from "./holoShine";
-
-type Point = {
-  x: number;
-  y: number;
-};
+import { Point } from "../type/type";
+import { HoloColorPalette } from "../data/data";
 
 export type HologramLayerProps = {
   width: number;
   height: number;
   borderRadius?: number;
   hologramMask: SkImage | null;
+  holoColors: RefObject<HoloColorPalette>;
   maskTransform: DerivedValue<
     (
       | {
@@ -97,6 +95,7 @@ function HologramLayerComponent(props: HologramLayerProps) {
           borderRadius={props.borderRadius ?? DEFAULT_SHINE_RADIUS}
           gradientStart={props.gradientStart}
           gradientEnd={props.gradientEnd}
+          holoColors={props.holoColors}
         />
       </Mask>
     </Group>
@@ -110,11 +109,10 @@ export const HologramLayer = memo(
     prev.height === next.height &&
     prev.borderRadius === next.borderRadius &&
     prev.hologramMask === next.hologramMask &&
+    prev.holoColors === next.holoColors &&
     prev.maskTransform === next.maskTransform &&
     prev.gradientStart === next.gradientStart &&
     prev.gradientEnd === next.gradientEnd,
 );
-
-HologramLayer.displayName = "HologramLayer";
 
 export default HologramLayer;

@@ -71,6 +71,7 @@ import pikachu from "./../assets/pokemon/pikachu.png";
 import squirtle from "./../assets/pokemon/squirtle.png";
 import totodile from "./../assets/pokemon/totodile.png";
 import vaporeon from "./../assets/pokemon/vaporeon.png";
+import { Color } from "@shopify/react-native-skia";
 
 export const POKEMON_OPTIONS = [
   { label: "Bulbasaur", value: bulbasaur },
@@ -108,3 +109,59 @@ export const getRandomCardList = (value: number = 10): ICardData[] => {
     };
   });
 };
+
+export const HOLO_COLORS = [
+  "#ff3b30",
+  "#ff9500",
+  "#ffcc00",
+  "#4cd964",
+  "#34aadc",
+  "#5856d6",
+  "#2e2d87",
+] as Color[];
+
+export const HOLO_CYBER_COLORS = [
+  "#ff00ff",
+  "#ff0080",
+  "#ff3cff",
+  "#7a00ff",
+  "#2d00ff",
+  "#008cff",
+  "#00f0ff",
+  "#00ff9c",
+  "#aaff00",
+] as Color[];
+
+export const HOLO_VAPORWAVE_COLORS = [
+  "#ff71ce",
+  "#ff00aa",
+  "#b967ff",
+  "#7b5cff",
+  "#01cdfe",
+  "#05ffa1",
+  "#bfff00",
+] as Color[];
+
+export const HOLO_NEON_COLORS = [
+  "#ff0040",
+  "#ff00ff",
+  "#9d00ff",
+  "#5b00ff",
+  "#003cff",
+  "#00b7ff",
+  "#00ffd0",
+  "#39ff14",
+  "#fff700",
+] as Color[];
+
+export type HoloColorPalette = readonly Color[];
+
+export const HOLO_COLOR_OPTIONS: readonly {
+  label: string;
+  value: HoloColorPalette;
+}[] = [
+  { label: "Classic", value: HOLO_COLORS },
+  { label: "Cyber Neon", value: HOLO_CYBER_COLORS },
+  { label: "Vaporwave", value: HOLO_VAPORWAVE_COLORS },
+  { label: "Hyper Neon", value: HOLO_NEON_COLORS },
+];

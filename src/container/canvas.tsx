@@ -10,7 +10,6 @@ import { SharedValue, useDerivedValue } from "react-native-reanimated";
 import {
   Canvas,
   DataSourceParam,
-  Image,
   Skia,
   useAnimatedImageValue,
   useImage,
@@ -20,14 +19,12 @@ import { GestureContainerMotion } from "./gesture";
 import { BackgrdoundShader } from "./backgroundShader";
 
 import backgroundSource from "../assets/background/background.png";
-import RGBSplit from "./rgbsplit";
-import ImageMask from "./imagemask";
 import ImageMaskReverse from "./imagemaskreverse";
-import { Outline } from "./outline";
 import HoloColver02 from "../assets/effect/holo_cover_02.gif";
-import HoloShine from "../component/holoShine";
 import HologramLayer from "../component/hologramLayer";
 import GlossLayer from "../component/glossLayer";
+import CardImageLayers from "../component/cardImageLayers";
+import { HoloColorPalette } from "../data/data";
 
 interface FullCanvasProps {
   showImage: boolean;
@@ -38,6 +35,7 @@ interface FullCanvasProps {
   showBackground: boolean;
   showOutline: boolean;
   showOutlineMask: boolean;
+  showOutlineHolo: boolean;
   showRGBSplit: boolean;
   showHoloMask: boolean;
   showHoloBackground: boolean;
@@ -48,6 +46,7 @@ interface FullCanvasProps {
   style?: StyleProp<ViewStyle>;
   hologramMaskSource?: DataSourceParam;
   shader: React.RefObject<string>;
+  holoColors: React.RefObject<HoloColorPalette>;
   motion?: GestureContainerMotion;
   isActive?: boolean;
   borderRadius?: number;
@@ -248,7 +247,7 @@ export const FullCanvas = (props: PropsWithChildren<FullCanvasProps>) => {
       </Canvas>
 
       <Canvas style={stylesimage.canvas}>
-        {props.showHoloBackground && (
+        {props.showHoloBackground && image && (
           <ImageMaskReverse
             image={holo_cover}
             mask={image}
@@ -257,70 +256,23 @@ export const FullCanvas = (props: PropsWithChildren<FullCanvasProps>) => {
           />
         )}
 
-        {props.showBackground && (
-          <Image
-            image={background}
-            width={props.width}
-            height={props.height}
-            fit="cover"
-          />
-        )}
-
-        {props.showOutline && (
-          <Outline image={image} width={props.width} height={props.height} />
-        )}
-
-        {props.showOutlineMask && (
-          <ImageMask
-            image={holo_cover}
-            mask={
-              <Outline
-                image={image}
-                width={props.width}
-                height={props.height}
-              />
-            }
-            width={props.width}
-            height={props.height}
-            mode="luminance"
-          />
-        )}
-
-        {/* <ImageMask
-          image={
-            <HoloShine
-              width={props.width}
-              height={props.height}
-              borderRadius={17}
-              gradientStart={gradientStart}
-              gradientEnd={gradientEnd}
-            />
-          }
-          mask={
-            <Outline image={image} width={props.width} height={props.height} />
-          }
+        <CardImageLayers
           width={props.width}
           height={props.height}
-          mode="luminance"
-        /> */}
-
-        {props.showImage && (
-          <Image image={image} width={props.width} height={props.height} />
-        )}
-
-        {props.showRGBSplit && (
-          <RGBSplit image={image} width={props.width} height={props.height} />
-        )}
-
-        {props.showHoloMask && (
-          <ImageMask
-            image={holo_cover}
-            mask={image}
-            width={props.width}
-            height={props.height}
-            mode="luminance"
-          />
-        )}
+          background={background}
+          image={image}
+          holoCover={holo_cover}
+          holoColors={props.holoColors}
+          showBackground={props.showBackground}
+          showOutline={props.showOutline}
+          showOutlineMask={props.showOutlineMask}
+          showOutlineHolo={props.showOutlineHolo}
+          showImage={props.showImage}
+          showRGBSplit={props.showRGBSplit}
+          showHoloMask={props.showHoloMask}
+          gradientStart={gradientStart}
+          gradientEnd={gradientEnd}
+        />
       </Canvas>
 
       {props.children}
@@ -340,6 +292,7 @@ export const FullCanvas = (props: PropsWithChildren<FullCanvasProps>) => {
           <HologramLayer
             width={props.width}
             height={props.height}
+            holoColors={props.holoColors}
             borderRadius={borderRadius}
             hologramMask={hologramMask}
             maskTransform={maskTransform}

@@ -1,11 +1,7 @@
 import { memo } from "react";
 import { DerivedValue } from "react-native-reanimated";
 import { Color, LinearGradient, RoundedRect } from "@shopify/react-native-skia";
-
-type Point = {
-  x: number;
-  y: number;
-};
+import { Point } from "../type/type";
 
 export type GlossLayerProps = {
   width: number;
@@ -56,7 +52,5 @@ export const GlossLayer = memo(
     prev.gradientStart === next.gradientStart &&
     prev.gradientEnd === next.gradientEnd,
 );
-
-GlossLayer.displayName = "GlossLayer";
 
 export default GlossLayer;

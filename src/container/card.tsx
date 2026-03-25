@@ -3,6 +3,7 @@ import { View, StyleSheet } from "react-native";
 import { GestureContainer } from "./gesture";
 import { FullCanvas } from "./canvas";
 import { DataSourceParam } from "@shopify/react-native-skia";
+import { HoloColorPalette } from "../data/data";
 
 interface CardProps {
   showShaderBack: boolean;
@@ -13,6 +14,7 @@ interface CardProps {
   showBackground: boolean;
   showOutline: boolean;
   showOutlineMask: boolean;
+  showOutlineHolo: boolean;
   showRGBSplit: boolean;
   showHoloMask: boolean;
   showHoloBackground: boolean;
@@ -20,6 +22,7 @@ interface CardProps {
   source: DataSourceParam;
   hologram: React.RefObject<number>;
   shader: React.RefObject<string>;
+  holoColors: React.RefObject<HoloColorPalette>;
   screen_width: number;
   width: number;
   height: number;
@@ -51,6 +54,7 @@ const Card: FC<CardProps> = (props) => {
             showBackground={props.showBackground}
             showOutline={props.showOutline}
             showOutlineMask={props.showOutlineMask}
+            showOutlineHolo={props.showOutlineHolo}
             showRGBSplit={props.showRGBSplit}
             showHoloMask={props.showHoloMask}
             showHoloBackground={props.showHoloBackground}
@@ -60,6 +64,7 @@ const Card: FC<CardProps> = (props) => {
             motion={motion}
             hologramMaskSource={props.hologram.current}
             shader={props.shader}
+            holoColors={props.holoColors}
             source={props.source}
           />
         )}

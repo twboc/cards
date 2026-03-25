@@ -1,3 +1,4 @@
+import { Color } from "@shopify/react-native-skia";
 import React, { memo, useState } from "react";
 import {
   Modal,
@@ -26,6 +27,7 @@ type ControlsModalProps = {
   showBackground: boolean;
   showOutline: boolean;
   showOutlineMask: boolean;
+  showOutlineHolo: boolean;
   showRGBSplit: boolean;
   showHoloMask: boolean;
   showHoloBackground: boolean;
@@ -37,6 +39,7 @@ type ControlsModalProps = {
   onToggleBackground: () => void;
   onToggleOutline: () => void;
   onToggleOutlineMask: () => void;
+  onToggleOutlineHolo: () => void;
   onToggleRGBSplit: () => void;
   onToggleHoloMask: () => void;
   onToggleHoloBackground: () => void;
@@ -44,12 +47,17 @@ type ControlsModalProps = {
   imageValueLabel: string;
   hologramValueLabel: string;
   shaderValueLabel: string;
+  holoColorsValueLabel: string;
+
   imageOptions: readonly SelectorOption<number>[];
   hologramOptions: readonly SelectorOption<number>[];
   shaderOptions: readonly SelectorOption<string>[];
+  holoColorOptions: readonly SelectorOption<readonly Color[]>[];
+
   onSelectImage: (value: number) => void;
   onSelectHologram: (value: number) => void;
   onSelectShader: (value: string) => void;
+  onSelectHoloColors: (value: readonly Color[]) => void;
 };
 
 type ControlRowProps = {
@@ -149,6 +157,8 @@ const ControlsModal = (props: ControlsModalProps) => {
   const [imageDropdownVisible, setImageDropdownVisible] = useState(false);
   const [hologramDropdownVisible, setHologramDropdownVisible] = useState(false);
   const [shaderDropdownVisible, setShaderDropdownVisible] = useState(false);
+  const [holoColorsDropdownVisible, setHoloColorsDropdownVisible] =
+    useState(false);
 
   return (
     <Modal
@@ -204,6 +214,16 @@ const ControlsModal = (props: ControlsModalProps) => {
               onSelect={(option) => props.onSelectShader(option.value)}
             />
 
+            <SelectorDropdown
+              label="Holo Colors"
+              valueLabel={props.holoColorsValueLabel}
+              options={props.holoColorOptions}
+              visible={holoColorsDropdownVisible}
+              onOpen={() => setHoloColorsDropdownVisible(true)}
+              onClose={() => setHoloColorsDropdownVisible(false)}
+              onSelect={(option) => props.onSelectHoloColors(option.value)}
+            />
+
             <ControlRow
               label="Image"
               value={props.showImage}
@@ -244,6 +264,12 @@ const ControlsModal = (props: ControlsModalProps) => {
               label="Outline Mask"
               value={props.showOutlineMask}
               onValueChange={props.onToggleOutlineMask}
+            />
+
+            <ControlRow
+              label="Outline Holo"
+              value={props.showOutlineHolo}
+              onValueChange={props.onToggleOutlineHolo}
             />
 
             <ControlRow

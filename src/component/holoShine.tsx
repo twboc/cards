@@ -1,11 +1,8 @@
-import { memo } from "react";
+import { memo, RefObject } from "react";
 import { DerivedValue } from "react-native-reanimated";
 import { Color, LinearGradient, RoundedRect } from "@shopify/react-native-skia";
-
-type Point = {
-  x: number;
-  y: number;
-};
+import { Point } from "../type/type";
+import { HoloColorPalette } from "../data/data";
 
 export type HoloShineProps = {
   width: number;
@@ -13,17 +10,8 @@ export type HoloShineProps = {
   borderRadius?: number;
   gradientStart: DerivedValue<Point>;
   gradientEnd: DerivedValue<Point>;
+  holoColors: RefObject<HoloColorPalette>;
 };
-
-const HOLO_COLORS = [
-  "#ff3b30",
-  "#ff9500",
-  "#ffcc00",
-  "#4cd964",
-  "#34aadc",
-  "#5856d6",
-  "#2e2d87",
-] as Color[];
 
 const DEFAULT_BORDER_RADIUS = 17;
 const ZERO = 0;
@@ -40,7 +28,7 @@ function HoloShineComponent(props: HoloShineProps) {
       <LinearGradient
         start={props.gradientStart}
         end={props.gradientEnd}
-        colors={HOLO_COLORS}
+        colors={(props.holoColors.current ?? []) as Color[]}
       />
     </RoundedRect>
   );
@@ -53,9 +41,8 @@ export const HoloShine = memo(
     prev.height === next.height &&
     prev.borderRadius === next.borderRadius &&
     prev.gradientStart === next.gradientStart &&
-    prev.gradientEnd === next.gradientEnd,
+    prev.gradientEnd === next.gradientEnd &&
+    prev.holoColors === next.holoColors,
 );
-
-HoloShine.displayName = "HoloShine";
 
 export default HoloShine;

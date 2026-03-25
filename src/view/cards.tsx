@@ -16,9 +16,11 @@ import Controls from "../container/controls.tsx";
 import {
   getRandomCardList,
   HOLO_BACKGROUND_OPTIONS,
+  HOLO_COLOR_OPTIONS,
   POKEMON_OPTIONS,
   SHADER_OPTIONS,
 } from "../data/data.ts";
+import { Color } from "@shopify/react-native-skia";
 
 export interface ICardData {
   source: number;
@@ -38,15 +40,20 @@ const Cards = () => {
 
   const [showShaderBack, setShowShaderBack] = useState(true);
   const [showImage, setShowImage] = useState(true);
-  const [showHologram, setShowHologram] = useState(false);
+  const [showHologram, setShowHologram] = useState(true);
   const [showGloss, setShowGloss] = useState(false);
 
   const [showBackground, setShowBackground] = useState(false);
   const [showOutline, setShowOutline] = useState(false);
   const [showOutlineMask, setShowOutlineMask] = useState(false);
+  const [showOutlineHolo, setShowOutlineHolo] = useState(true);
   const [showRGBSplit, setShowRGBSplit] = useState(false);
   const [showHoloMask, setShowHoloMask] = useState(false);
   const [showHoloBackground, setShowHoloBackground] = useState(false);
+
+  const [selectedHoloColors, setSelectedHoloColors] = useState(
+    HOLO_COLOR_OPTIONS[0].value,
+  );
 
   const [controlsVisible, setControlsVisible] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -69,6 +76,11 @@ const Cards = () => {
     [activeCard.shader],
   );
 
+  const holoColorsRef = useMemo(
+    () => ({ current: selectedHoloColors }),
+    [selectedHoloColors],
+  );
+
   const toggleShowShaderBack = () =>
     setShowShaderBack((previousState) => !previousState);
   const toggleShowImage = () => setShowImage((previousState) => !previousState);
@@ -82,6 +94,8 @@ const Cards = () => {
     setShowOutline((previousState) => !previousState);
   const toggleShowOutlineMask = () =>
     setShowOutlineMask((previousState) => !previousState);
+  const toggleShowOutlineHolo = () =>
+    setShowOutlineHolo((previousState) => !previousState);
   const toggleShowRGBSplit = () =>
     setShowRGBSplit((previousState) => !previousState);
   const toggleShowHoloMask = () =>
@@ -138,6 +152,10 @@ const Cards = () => {
     [updateActiveCard],
   );
 
+  const handleSelectHoloColors = useCallback((colors: readonly Color[]) => {
+    setSelectedHoloColors(colors);
+  }, []);
+
   const renderSliderItem = useCallback(
     ({ item, index }: ListRenderItemInfo<ICardData>) => {
       const isSelected = index === activeIndex;
@@ -190,6 +208,13 @@ const Cards = () => {
     );
   }, [activeCard.shader]);
 
+  const holoColorsValueLabel = useMemo(() => {
+    return (
+      HOLO_COLOR_OPTIONS.find((item) => item.value === selectedHoloColors)
+        ?.label ?? "Select holo colors"
+    );
+  }, [selectedHoloColors]);
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.wrapper}>
@@ -202,12 +227,14 @@ const Cards = () => {
           showBackground={showBackground}
           showOutline={showOutline}
           showOutlineMask={showOutlineMask}
+          showOutlineHolo={showOutlineHolo}
           showRGBSplit={showRGBSplit}
           showHoloMask={showHoloMask}
           showHoloBackground={showHoloBackground}
           source={activeCard.source}
           hologram={hologramRef}
           shader={shaderRef}
+          holoColors={holoColorsRef}
           screen_width={SCREEN_WIDTH}
           width={WIDTH}
           height={HEIGHT}
@@ -246,6 +273,7 @@ const Cards = () => {
           showBackground={showBackground}
           showOutline={showOutline}
           showOutlineMask={showOutlineMask}
+          showOutlineHolo={showOutlineHolo}
           showRGBSplit={showRGBSplit}
           showHoloMask={showHoloMask}
           showHoloBackground={showHoloBackground}
@@ -256,18 +284,22 @@ const Cards = () => {
           onToggleBackground={toggleShowBackground}
           onToggleOutline={toggleShowOutline}
           onToggleOutlineMask={toggleShowOutlineMask}
+          onToggleOutlineHolo={toggleShowOutlineHolo}
           onToggleRGBSplit={toggleShowRGBSplit}
           onToggleHoloMask={toggleShowHoloMask}
           onToggleHoloBackground={toggleShowHoloBackground}
           imageValueLabel={imageValueLabel}
           hologramValueLabel={hologramValueLabel}
           shaderValueLabel={shaderValueLabel}
+          holoColorsValueLabel={holoColorsValueLabel}
           imageOptions={POKEMON_OPTIONS}
           hologramOptions={HOLO_BACKGROUND_OPTIONS}
           shaderOptions={SHADER_OPTIONS}
+          holoColorOptions={HOLO_COLOR_OPTIONS}
           onSelectImage={handleSelectImage}
           onSelectHologram={handleSelectHologram}
           onSelectShader={handleSelectShader}
+          onSelectHoloColors={handleSelectHoloColors}
         />
       </View>
     </SafeAreaView>
