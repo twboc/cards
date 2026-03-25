@@ -5,8 +5,8 @@ import {
   SkRuntimeEffect,
 } from "@shopify/react-native-skia";
 import { SharedValue } from "react-native-reanimated";
-import { HoloColorPalette } from "../../data/data";
 import { GestureContainerMotion } from "../gesture/gesture";
+import { HoloColorPalette } from "../../data/data.colors";
 
 interface CardVisibilityProps {
   perfMonitor: boolean;

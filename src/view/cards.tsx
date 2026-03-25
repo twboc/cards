@@ -12,13 +12,13 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import Card from "../container/card/card.tsx";
-import Controls from "../container/controls.tsx";
 import { getCardList } from "../data/data.ts";
 import { Color } from "@shopify/react-native-skia";
 import { HOLO_COLOR_OPTIONS } from "../data/data.colors.ts";
 import { POKEMON_OPTIONS } from "../data/data.pokemon.ts";
 import { HOLO_BACKGROUND_OPTIONS } from "../data/data.holo.ts";
 import { SHADER_OPTIONS } from "../data/data.shader.ts";
+import Controls from "../container/controls/controls.tsx";
 
 export interface ICardData {
   source: number;
@@ -93,12 +93,23 @@ const Cards = () => {
 
   const toggleShowBackground = () =>
     setShowBackground((previousState) => !previousState);
-  const toggleShowOutline = () =>
+
+  const toggleShowOutline = () => {
     setShowOutline((previousState) => !previousState);
-  const toggleShowOutlineMask = () =>
+    setShowOutlineMask(false);
+    setShowOutlineHolo(false);
+  };
+  const toggleShowOutlineMask = () => {
     setShowOutlineMask((previousState) => !previousState);
-  const toggleShowOutlineHolo = () =>
+    setShowOutline(false);
+    setShowOutlineHolo(false);
+  };
+  const toggleShowOutlineHolo = () => {
     setShowOutlineHolo((previousState) => !previousState);
+    setShowOutline(false);
+    setShowOutlineMask(false);
+  };
+
   const toggleShowRGBSplit = () =>
     setShowRGBSplit((previousState) => !previousState);
   const toggleShowHoloMask = () =>

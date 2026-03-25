@@ -7,8 +7,7 @@ import {
 } from "@shopify/react-native-skia";
 import { StyleProp, ViewStyle } from "react-native";
 import { GestureContainerMotion } from "../gesture/gesture";
-import { HoloColorPalette } from "../../data/data";
-
+import { HoloColorPalette } from "../../data/data.colors";
 export default interface FullCanvasProps {
   perfMonitor: boolean;
 

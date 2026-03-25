@@ -6,9 +6,9 @@ import ImageMaskReverse from "../imagemaskreverse";
 import HologramLayer from "../../component/hologramLayer";
 import GlossLayer from "../../component/glossLayer";
 import CardImageLayers from "../../component/cardImageLayers";
-import { HoloColorPalette } from "../../data/data";
 import { GradientPoints } from "../../type/type";
 import { PerformanceOverlay } from "../monitor";
+import { HoloColorPalette } from "../../data/data.colors";
 
 type ShaderLayerProps = {
   visible: boolean;
