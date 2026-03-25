@@ -43,7 +43,7 @@ const Cards = () => {
   const [showShaderBack, setShowShaderBack] = useState(true);
   const [showImage, setShowImage] = useState(true);
   const [showHologram, setShowHologram] = useState(true);
-  const [showGloss, setShowGloss] = useState(false);
+  const [showGloss, setShowGloss] = useState(true);
 
   const [showBackground, setShowBackground] = useState(false);
   const [showOutline, setShowOutline] = useState(false);
