@@ -8,7 +8,7 @@ import {
 } from "@shopify/react-native-skia";
 import { SharedValue, useDerivedValue } from "react-native-reanimated";
 
-interface BackgrdoundShaderProps {
+interface BackgrdoundProps {
   width: number;
   height: number;
   borderRadius: number;
@@ -17,7 +17,7 @@ interface BackgrdoundShaderProps {
   children?: ReactNode;
 }
 
-export const BackgrdoundShader: FC<BackgrdoundShaderProps> = (props) => {
+export const Backgrdound: FC<BackgrdoundProps> = (props) => {
   if (props.shaderEffectRef.current == null) {
     return null;
   }

@@ -1,7 +1,7 @@
 import React, { FC, useMemo, useRef } from "react";
 import { View, StyleSheet } from "react-native";
 import { GestureContainer } from "./gesture";
-import { FullCanvas } from "./canvas";
+import { FullCanvas } from "./canvas/canvas";
 import {
   DataSourceParam,
   Skia,
