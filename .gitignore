@@ -6,7 +6,8 @@ ios/cards.xcworkspace/**/*
 
 xcuserdata/
 *.xcuserstate
-
+ios/**/*.xcuserdata
+ios/**/*.xcuserstate
 
 # Xcode
 !**/*.xcodeproj
