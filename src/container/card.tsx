@@ -44,6 +44,7 @@ const Card: FC<CardProps> = (props) => {
       >
         {(motion) => (
           <FullCanvas
+            showImage={props.showImage}
             showShaderBack={props.showShaderBack}
             showHologram={props.showHologram}
             showGloss={props.showGloss}

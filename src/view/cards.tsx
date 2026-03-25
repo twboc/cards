@@ -38,13 +38,13 @@ const Cards = () => {
 
   const [showShaderBack, setShowShaderBack] = useState(true);
   const [showImage, setShowImage] = useState(true);
-  const [showHologram, setShowHologram] = useState(true);
-  const [showGloss, setShowGloss] = useState(true);
+  const [showHologram, setShowHologram] = useState(false);
+  const [showGloss, setShowGloss] = useState(false);
 
-  const [showBackground, setShowBackground] = useState(true);
-  const [showOutline, setShowOutline] = useState(true);
+  const [showBackground, setShowBackground] = useState(false);
+  const [showOutline, setShowOutline] = useState(false);
   const [showOutlineMask, setShowOutlineMask] = useState(false);
-  const [showRGBSplit, setShowRGBSplit] = useState(true);
+  const [showRGBSplit, setShowRGBSplit] = useState(false);
   const [showHoloMask, setShowHoloMask] = useState(false);
   const [showHoloBackground, setShowHoloBackground] = useState(false);
 
@@ -75,6 +75,19 @@ const Cards = () => {
   const toggleShowHologram = () =>
     setShowHologram((previousState) => !previousState);
   const toggleShowGloss = () => setShowGloss((previousState) => !previousState);
+
+  const toggleShowBackground = () =>
+    setShowBackground((previousState) => !previousState);
+  const toggleShowOutline = () =>
+    setShowOutline((previousState) => !previousState);
+  const toggleShowOutlineMask = () =>
+    setShowOutlineMask((previousState) => !previousState);
+  const toggleShowRGBSplit = () =>
+    setShowRGBSplit((previousState) => !previousState);
+  const toggleShowHoloMask = () =>
+    setShowHoloMask((previousState) => !previousState);
+  const toggleShowHoloBackground = () =>
+    setShowHoloBackground((previousState) => !previousState);
 
   const handleSelectCard = useCallback((index: number) => {
     setActiveIndex(index);
@@ -200,6 +213,7 @@ const Cards = () => {
           height={HEIGHT}
           max_angle={MAX_ANGLE}
         />
+
         <View style={styles.bottomPanel}>
           <View style={styles.sliderWrap}>
             <FlatList
@@ -229,10 +243,22 @@ const Cards = () => {
           showShaderBack={showShaderBack}
           showHologram={showHologram}
           showGloss={showGloss}
+          showBackground={showBackground}
+          showOutline={showOutline}
+          showOutlineMask={showOutlineMask}
+          showRGBSplit={showRGBSplit}
+          showHoloMask={showHoloMask}
+          showHoloBackground={showHoloBackground}
           onToggleImage={toggleShowImage}
           onToggleShaderBack={toggleShowShaderBack}
           onToggleHologram={toggleShowHologram}
           onToggleGloss={toggleShowGloss}
+          onToggleBackground={toggleShowBackground}
+          onToggleOutline={toggleShowOutline}
+          onToggleOutlineMask={toggleShowOutlineMask}
+          onToggleRGBSplit={toggleShowRGBSplit}
+          onToggleHoloMask={toggleShowHoloMask}
+          onToggleHoloBackground={toggleShowHoloBackground}
           imageValueLabel={imageValueLabel}
           hologramValueLabel={hologramValueLabel}
           shaderValueLabel={shaderValueLabel}

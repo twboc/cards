@@ -31,6 +31,7 @@ import { Outline } from "./outline";
 import HoloColver02 from "../assets/effect/holo_cover_02.gif";
 
 interface FullCanvasProps {
+  showImage: boolean;
   showShaderBack: boolean;
   showHologram: boolean;
   showGloss: boolean;
@@ -61,12 +62,12 @@ const zeroShared = {
 const TARGET_FPS = 30;
 const FRAME_DURATION = 1000 / TARGET_FPS;
 
-const BACKGROUND_FLAG = true;
-const OUTLINE_FLAG = true;
-const OUTLINE_MASK_FLAG = false;
-const RGB_SPLIT_FLAG = true;
-const HOLO_MASK_FLAG = false;
-const HOLO_BACKGROUND_FLAG = false;
+// const BACKGROUND_FLAG = true;
+// const OUTLINE_FLAG = true;
+// const OUTLINE_MASK_FLAG = false;
+// const RGB_SPLIT_FLAG = true;
+// const HOLO_MASK_FLAG = false;
+// const HOLO_BACKGROUND_FLAG = false;
 
 export const FullCanvas = (props: PropsWithChildren<FullCanvasProps>) => {
   const isActive = props.isActive || true;
@@ -335,7 +336,7 @@ export const FullCanvas = (props: PropsWithChildren<FullCanvasProps>) => {
       </Canvas>
 
       <Canvas style={stylesimage.canvas}>
-        {HOLO_BACKGROUND_FLAG && (
+        {props.showHoloBackground && (
           <ImageMaskReverse
             image={holo_cover}
             mask={image}
@@ -344,7 +345,7 @@ export const FullCanvas = (props: PropsWithChildren<FullCanvasProps>) => {
           />
         )}
 
-        {BACKGROUND_FLAG && (
+        {props.showBackground && (
           <Image
             image={background}
             width={props.width + 0}
@@ -353,11 +354,11 @@ export const FullCanvas = (props: PropsWithChildren<FullCanvasProps>) => {
           />
         )}
 
-        {OUTLINE_FLAG && (
+        {props.showOutline && (
           <Outline image={image} width={props.width} height={props.height} />
         )}
 
-        {OUTLINE_MASK_FLAG && (
+        {props.showOutlineMask && (
           <ImageMask
             image={holo_cover}
             mask={
@@ -373,13 +374,14 @@ export const FullCanvas = (props: PropsWithChildren<FullCanvasProps>) => {
           />
         )}
 
-        {/* {showImage && } */}
-        <Image image={image} width={props.width} height={props.height} />
+        {props.showImage && (
+          <Image image={image} width={props.width} height={props.height} />
+        )}
 
-        {RGB_SPLIT_FLAG && (
+        {props.showRGBSplit && (
           <RGBSplit image={image} width={props.width} height={props.height} />
         )}
-        {HOLO_MASK_FLAG && (
+        {props.showHoloMask && (
           <ImageMask
             image={holo_cover}
             mask={image}

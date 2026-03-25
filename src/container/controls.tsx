@@ -18,14 +18,29 @@ type SelectorOption<T> = {
 type ControlsModalProps = {
   visible: boolean;
   onClose: () => void;
+
   showImage: boolean;
   showShaderBack: boolean;
   showHologram: boolean;
   showGloss: boolean;
+  showBackground: boolean;
+  showOutline: boolean;
+  showOutlineMask: boolean;
+  showRGBSplit: boolean;
+  showHoloMask: boolean;
+  showHoloBackground: boolean;
+
   onToggleImage: () => void;
   onToggleShaderBack: () => void;
   onToggleHologram: () => void;
   onToggleGloss: () => void;
+  onToggleBackground: () => void;
+  onToggleOutline: () => void;
+  onToggleOutlineMask: () => void;
+  onToggleRGBSplit: () => void;
+  onToggleHoloMask: () => void;
+  onToggleHoloBackground: () => void;
+
   imageValueLabel: string;
   hologramValueLabel: string;
   shaderValueLabel: string;
@@ -211,6 +226,42 @@ const ControlsModal = (props: ControlsModalProps) => {
               label="Gloss"
               value={props.showGloss}
               onValueChange={props.onToggleGloss}
+            />
+
+            <ControlRow
+              label="Background"
+              value={props.showBackground}
+              onValueChange={props.onToggleBackground}
+            />
+
+            <ControlRow
+              label="Outline"
+              value={props.showOutline}
+              onValueChange={props.onToggleOutline}
+            />
+
+            <ControlRow
+              label="Outline Mask"
+              value={props.showOutlineMask}
+              onValueChange={props.onToggleOutlineMask}
+            />
+
+            <ControlRow
+              label="RGB Split"
+              value={props.showRGBSplit}
+              onValueChange={props.onToggleRGBSplit}
+            />
+
+            <ControlRow
+              label="Holo Mask"
+              value={props.showHoloMask}
+              onValueChange={props.onToggleHoloMask}
+            />
+
+            <ControlRow
+              label="Holo Background"
+              value={props.showHoloBackground}
+              onValueChange={props.onToggleHoloBackground}
             />
 
             <View style={styles.modalBottomSpacer} />
