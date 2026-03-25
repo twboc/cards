@@ -2,9 +2,11 @@ ios/Pods/
 node_modules/
 ios/build/
 ios/cards.xcworkspace/**/*
+*.DS_Store*
 
 xcuserdata/
 *.xcuserstate
+
 
 # Xcode
 !**/*.xcodeproj
