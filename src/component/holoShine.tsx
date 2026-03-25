@@ -1,13 +1,8 @@
 import { memo, RefObject } from "react";
 import { DerivedValue, useDerivedValue } from "react-native-reanimated";
 import { Color, LinearGradient, RoundedRect } from "@shopify/react-native-skia";
-import { Point } from "../type/type";
+import { GradientPoints } from "../type/type";
 import { HoloColorPalette } from "../data/data";
-
-type GradientPoints = {
-  start: Point;
-  end: Point;
-};
 
 export type HoloShineProps = {
   width: number;

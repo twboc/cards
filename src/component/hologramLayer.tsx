@@ -11,13 +11,8 @@ import {
   Transforms3d,
 } from "@shopify/react-native-skia";
 import HoloShine from "./holoShine";
-import { Point } from "../type/type";
+import { GradientPoints } from "../type/type";
 import { HoloColorPalette } from "../data/data";
-
-type GradientPoints = {
-  start: Point;
-  end: Point;
-};
 
 export type HologramLayerProps = {
   width: number;

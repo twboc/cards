@@ -4,14 +4,9 @@ import { Image, SkImage } from "@shopify/react-native-skia";
 import HoloShine from "../component/holoShine";
 import { Outline } from "../container/outline";
 import ImageMask from "../container/imagemask";
-import { Point } from "../type/type";
+import { GradientPoints } from "../type/type";
 import { HoloColorPalette } from "../data/data";
 import RGBSplit from "../container/rgbsplit/rgbsplit";
-
-type GradientPoints = {
-  start: Point;
-  end: Point;
-};
 
 export type CardImageLayersProps = {
   width: number;
