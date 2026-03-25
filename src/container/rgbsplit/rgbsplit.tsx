@@ -19,8 +19,8 @@ import {
   SMEAR_BLUR,
   SMEAR_MATRIX,
   SMEAR_X_FACTOR,
-  ZERO,
 } from "./rgbsplit.const";
+import { ZERO } from "../../const/const";
 
 const RGBSplitComponent: FC<RGBSplitProps> = (props) => {
   if (!props.image) {

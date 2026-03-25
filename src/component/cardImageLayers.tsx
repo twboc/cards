@@ -5,8 +5,9 @@ import HoloShine from "../component/holoShine";
 import { Outline } from "../container/outline";
 import ImageMask from "../container/imagemask";
 import { GradientPoints } from "../type/type";
-import { HoloColorPalette } from "../data/data";
 import RGBSplit from "../container/rgbsplit/rgbsplit";
+import { HoloColorPalette } from "../data/data.colors";
+import { DEFAULT_BORDER_RADIUS } from "../const/const";
 
 export type CardImageLayersProps = {
   width: number;
@@ -29,7 +30,6 @@ export type CardImageLayersProps = {
 
 const IMAGE_FIT = "cover" as const;
 const MASK_MODE = "luminance" as const;
-const OUTLINE_HOLO_RADIUS = 17;
 
 function CardImageLayersComponent(props: CardImageLayersProps) {
   if (!props.image) {
@@ -77,7 +77,7 @@ function CardImageLayersComponent(props: CardImageLayersProps) {
             <HoloShine
               width={props.width}
               height={props.height}
-              borderRadius={OUTLINE_HOLO_RADIUS}
+              borderRadius={DEFAULT_BORDER_RADIUS}
               gradientPoints={props.gradientPoints}
               holoColors={props.holoColors}
             />

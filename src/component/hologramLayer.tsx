@@ -12,7 +12,8 @@ import {
 } from "@shopify/react-native-skia";
 import HoloShine from "./holoShine";
 import { GradientPoints } from "../type/type";
-import { HoloColorPalette } from "../data/data";
+import { HoloColorPalette } from "../data/data.colors";
+import { DEFAULT_BORDER_RADIUS, ZERO } from "../const/const";
 
 export type HologramLayerProps = {
   width: number;
@@ -23,10 +24,6 @@ export type HologramLayerProps = {
   maskTransform: DerivedValue<Transforms3d>;
   gradientPoints: DerivedValue<GradientPoints>;
 };
-
-const ZERO = 0;
-const DEFAULT_MASK_RADIUS = 12;
-const DEFAULT_SHINE_RADIUS = 17;
 
 const MASK_COLORS = [
   "rgba(0, 0, 0, 0)",
@@ -56,7 +53,7 @@ function HologramLayerComponent(props: HologramLayerProps) {
     return null;
   }
 
-  const maskRadius = props.borderRadius ?? DEFAULT_MASK_RADIUS;
+  const maskRadius = props.borderRadius ?? DEFAULT_BORDER_RADIUS;
 
   return (
     <Group blendMode={BLEND_MODE}>
@@ -91,7 +88,7 @@ function HologramLayerComponent(props: HologramLayerProps) {
         <HoloShine
           width={props.width}
           height={props.height}
-          borderRadius={props.borderRadius ?? DEFAULT_SHINE_RADIUS}
+          borderRadius={props.borderRadius ?? DEFAULT_BORDER_RADIUS}
           gradientPoints={props.gradientPoints}
           holoColors={props.holoColors}
         />

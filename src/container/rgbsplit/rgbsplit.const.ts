@@ -1,4 +1,3 @@
-export const ZERO = 0;
 export const DEFAULT_GLITCH_X = 6;
 export const DEFAULT_GLITCH_Y = 2;
 export const DEFAULT_INTENSITY = 1;

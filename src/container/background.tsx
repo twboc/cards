@@ -7,6 +7,7 @@ import {
   SkRuntimeEffect,
 } from "@shopify/react-native-skia";
 import { SharedValue, useDerivedValue } from "react-native-reanimated";
+import { ZERO } from "../const/const";
 
 type BackgrdoundProps = {
   width: number;
@@ -16,7 +17,6 @@ type BackgrdoundProps = {
   time: SharedValue<number>;
 };
 
-const ZERO = 0;
 const MASK_MODE = "alpha" as const;
 const MASK_COLOR = "white";
 
