@@ -1,20 +1,17 @@
-import { PropsWithChildren, useMemo, useRef } from "react";
+import { PropsWithChildren, useMemo } from "react";
 import { SharedValue, useDerivedValue } from "react-native-reanimated";
 import {
   Canvas,
   DataSourceParam,
-  Skia,
-  useAnimatedImageValue,
+  SkImage,
+  SkRuntimeEffect,
   useClock,
-  useImage,
 } from "@shopify/react-native-skia";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { GestureContainerMotion } from "./gesture";
 import { BackgrdoundShader } from "./backgroundShader";
 
-import backgroundSource from "../assets/background/background.png";
 import ImageMaskReverse from "./imagemaskreverse";
-import HoloColver02 from "../assets/effect/holo_cover_02.gif";
 import HologramLayer from "../component/hologramLayer";
 import GlossLayer from "../component/glossLayer";
 import CardImageLayers from "../component/cardImageLayers";
@@ -45,6 +42,12 @@ interface FullCanvasProps {
   isActive?: boolean;
   borderRadius?: number;
   source: DataSourceParam;
+
+  background: SkImage | null;
+  image: SkImage | null;
+  holoCover: SharedValue<SkImage | null>;
+  hologramMask: SkImage | null;
+  shaderEffectRef: React.RefObject<SkRuntimeEffect | null>;
 }
 
 const zeroShared = {
@@ -56,12 +59,6 @@ export const FullCanvas = (props: PropsWithChildren<FullCanvasProps>) => {
   const maxAngle = props.maxAngle ?? 15;
   const borderRadius = props.borderRadius ?? 12;
   const style = props.style;
-
-  const background = useImage(backgroundSource);
-  const image = useImage(props.source);
-  const holo_cover = useAnimatedImageValue(HoloColver02);
-  const hologramMask = useImage(props.hologramMaskSource);
-  const shaderEffectRef = useRef(Skia.RuntimeEffect.Make(props.shader.current));
 
   const gestureRotateX = props.motion?.gestureRotateX ?? zeroShared;
   const gestureRotateY = props.motion?.gestureRotateY ?? zeroShared;
@@ -156,7 +153,7 @@ export const FullCanvas = (props: PropsWithChildren<FullCanvasProps>) => {
     [props.width, props.height, borderRadius],
   );
 
-  if (!shaderEffectRef.current) {
+  if (!props.shaderEffectRef.current) {
     return <View style={containerStyle}>{props.children}</View>;
   }
 
@@ -177,18 +174,18 @@ export const FullCanvas = (props: PropsWithChildren<FullCanvasProps>) => {
             height={props.height}
             borderRadius={borderRadius}
             time={time}
-            shaderEffectRef={shaderEffectRef}
+            shaderEffectRef={props.shaderEffectRef}
           />
         )}
       </Canvas>
 
       <Canvas pointerEvents="none" style={absoluteCanvasStyle}>
-        {props.showHoloBackground && image && (
+        {props.showHoloBackground && props.image && (
           <ImageMaskReverse
             width={props.width}
             height={props.height}
-            image={holo_cover}
-            mask={image}
+            image={props.holoCover}
+            mask={props.image}
           />
         )}
 
@@ -203,9 +200,9 @@ export const FullCanvas = (props: PropsWithChildren<FullCanvasProps>) => {
           showImage={props.showImage}
           showRGBSplit={props.showRGBSplit}
           showHoloMask={props.showHoloMask}
-          background={background}
-          image={image}
-          holoCover={holo_cover}
+          background={props.background}
+          image={props.image}
+          holoCover={props.holoCover}
           gradientStart={gradientStart}
           gradientEnd={gradientEnd}
         />
@@ -216,7 +213,7 @@ export const FullCanvas = (props: PropsWithChildren<FullCanvasProps>) => {
             height={props.height}
             holoColors={props.holoColors}
             borderRadius={borderRadius}
-            hologramMask={hologramMask}
+            hologramMask={props.hologramMask}
             maskTransform={maskTransform}
             gradientStart={gradientStart}
             gradientEnd={gradientEnd}

@@ -1,9 +1,16 @@
-import React, { FC } from "react";
+import React, { FC, useRef } from "react";
 import { View, StyleSheet } from "react-native";
 import { GestureContainer } from "./gesture";
 import { FullCanvas } from "./canvas";
-import { DataSourceParam } from "@shopify/react-native-skia";
+import {
+  DataSourceParam,
+  Skia,
+  useAnimatedImageValue,
+  useImage,
+} from "@shopify/react-native-skia";
 import { HoloColorPalette } from "../data/data";
+import backgroundSource from "../assets/background/background.png";
+import HoloColver02 from "../assets/effect/holo_cover_02.gif";
 
 interface CardProps {
   showShaderBack: boolean;
@@ -30,6 +37,11 @@ interface CardProps {
 }
 
 const Card: FC<CardProps> = (props) => {
+  const background = useImage(backgroundSource);
+  const image = useImage(props.source);
+  const holoCover = useAnimatedImageValue(HoloColver02);
+  const hologramMask = useImage(props.hologram.current);
+  const shaderEffectRef = useRef(Skia.RuntimeEffect.Make(props.shader.current));
   return (
     <View
       style={[
@@ -66,6 +78,11 @@ const Card: FC<CardProps> = (props) => {
             shader={props.shader}
             holoColors={props.holoColors}
             source={props.source}
+            background={background}
+            image={image}
+            holoCover={holoCover}
+            hologramMask={hologramMask}
+            shaderEffectRef={shaderEffectRef}
           />
         )}
       </GestureContainer>
