@@ -8,6 +8,11 @@ import RGBSplit from "../container/rgbsplit";
 import { Point } from "../type/type";
 import { HoloColorPalette } from "../data/data";
 
+type GradientPoints = {
+  start: Point;
+  end: Point;
+};
+
 export type CardImageLayersProps = {
   width: number;
   height: number;
@@ -24,8 +29,7 @@ export type CardImageLayersProps = {
   showRGBSplit: boolean;
   showHoloMask: boolean;
 
-  gradientStart: DerivedValue<Point>;
-  gradientEnd: DerivedValue<Point>;
+  gradientPoints: DerivedValue<GradientPoints>;
 };
 
 const IMAGE_FIT = "cover" as const;
@@ -79,8 +83,7 @@ function CardImageLayersComponent(props: CardImageLayersProps) {
               width={props.width}
               height={props.height}
               borderRadius={OUTLINE_HOLO_RADIUS}
-              gradientStart={props.gradientStart}
-              gradientEnd={props.gradientEnd}
+              gradientPoints={props.gradientPoints}
               holoColors={props.holoColors}
             />
           }
@@ -138,8 +141,7 @@ export const CardImageLayers = memo(
     prev.showImage === next.showImage &&
     prev.showRGBSplit === next.showRGBSplit &&
     prev.showHoloMask === next.showHoloMask &&
-    prev.gradientStart === next.gradientStart &&
-    prev.gradientEnd === next.gradientEnd,
+    prev.gradientPoints === next.gradientPoints,
 );
 
 export default CardImageLayers;

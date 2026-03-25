@@ -1,4 +1,4 @@
-import React, { FC, useRef } from "react";
+import React, { FC, useMemo, useRef } from "react";
 import { View, StyleSheet } from "react-native";
 import { GestureContainer } from "./gesture";
 import { FullCanvas } from "./canvas";

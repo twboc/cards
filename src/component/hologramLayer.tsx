@@ -1,5 +1,5 @@
 import { memo, RefObject } from "react";
-import { DerivedValue } from "react-native-reanimated";
+import { DerivedValue, useDerivedValue } from "react-native-reanimated";
 import {
   Color,
   Group,
@@ -12,6 +12,11 @@ import {
 import HoloShine from "./holoShine";
 import { Point } from "../type/type";
 import { HoloColorPalette } from "../data/data";
+
+type GradientPoints = {
+  start: Point;
+  end: Point;
+};
 
 export type HologramLayerProps = {
   width: number;
@@ -31,8 +36,7 @@ export type HologramLayerProps = {
         }
     )[]
   >;
-  gradientStart: DerivedValue<Point>;
-  gradientEnd: DerivedValue<Point>;
+  gradientPoints: DerivedValue<GradientPoints>;
 };
 
 const ZERO = 0;
@@ -53,6 +57,16 @@ const BLEND_MODE = "overlay" as const;
 const MASK_MODE = "luminance" as const;
 
 function HologramLayerComponent(props: HologramLayerProps) {
+  const gradientStart = useDerivedValue(
+    () => props.gradientPoints.value.start,
+    [props.gradientPoints],
+  );
+
+  const gradientEnd = useDerivedValue(
+    () => props.gradientPoints.value.end,
+    [props.gradientPoints],
+  );
+
   if (!props.hologramMask) {
     return null;
   }
@@ -72,8 +86,8 @@ function HologramLayerComponent(props: HologramLayerProps) {
             height={props.height}
           >
             <LinearGradient
-              start={props.gradientStart}
-              end={props.gradientEnd}
+              start={gradientStart}
+              end={gradientEnd}
               colors={MASK_COLORS}
               positions={MASK_POSITIONS}
             />
@@ -93,8 +107,7 @@ function HologramLayerComponent(props: HologramLayerProps) {
           width={props.width}
           height={props.height}
           borderRadius={props.borderRadius ?? DEFAULT_SHINE_RADIUS}
-          gradientStart={props.gradientStart}
-          gradientEnd={props.gradientEnd}
+          gradientPoints={props.gradientPoints}
           holoColors={props.holoColors}
         />
       </Mask>
@@ -111,8 +124,7 @@ export const HologramLayer = memo(
     prev.hologramMask === next.hologramMask &&
     prev.holoColors === next.holoColors &&
     prev.maskTransform === next.maskTransform &&
-    prev.gradientStart === next.gradientStart &&
-    prev.gradientEnd === next.gradientEnd,
+    prev.gradientPoints === next.gradientPoints,
 );
 
 export default HologramLayer;

@@ -83,29 +83,36 @@ export const FullCanvas = (props: PropsWithChildren<FullCanvasProps>) => {
     [gestureRotateY, sensorRotateY],
   );
 
-  const gradientStart = useDerivedValue(() => ({
-    x:
-      -props.width +
-      (props.width / 2 + (props.width / 2) * (totalRotateY.value / maxAngle)) +
-      sensorTranslateX.value * 0.35,
-    y:
-      -props.height +
-      (props.height / 2 +
-        (props.height / 2) * (totalRotateX.value / maxAngle)) +
-      sensorTranslateY.value * 0.35,
-  }));
+  const gradientPoints = useDerivedValue(() => {
+    const halfWidth = props.width * 0.5;
+    const halfHeight = props.height * 0.5;
+    const rotateXNorm = totalRotateX.value / maxAngle;
+    const rotateYNorm = totalRotateY.value / maxAngle;
+    const tx = sensorTranslateX.value * 0.35;
+    const ty = sensorTranslateY.value * 0.35;
 
-  const gradientEnd = useDerivedValue(() => ({
-    x:
-      props.width +
-      (props.width / 2 + (props.width / 2) * (totalRotateY.value / maxAngle)) +
-      sensorTranslateX.value * 0.35,
-    y:
-      props.height +
-      (props.height / 2 +
-        (props.height / 2) * (totalRotateX.value / maxAngle)) +
-      sensorTranslateY.value * 0.35,
-  }));
+    const centerX = halfWidth + halfWidth * rotateYNorm + tx;
+    const centerY = halfHeight + halfHeight * rotateXNorm + ty;
+
+    return {
+      start: {
+        x: -props.width + centerX,
+        y: -props.height + centerY,
+      },
+      end: {
+        x: props.width + centerX,
+        y: props.height + centerY,
+      },
+    };
+  }, [
+    props.width,
+    props.height,
+    maxAngle,
+    totalRotateX,
+    totalRotateY,
+    sensorTranslateX,
+    sensorTranslateY,
+  ]);
 
   const maskTransform = useDerivedValue(
     () => [
@@ -203,8 +210,7 @@ export const FullCanvas = (props: PropsWithChildren<FullCanvasProps>) => {
           background={props.background}
           image={props.image}
           holoCover={props.holoCover}
-          gradientStart={gradientStart}
-          gradientEnd={gradientEnd}
+          gradientPoints={gradientPoints}
         />
 
         {props.showHologram && props.hologramMaskSource && (
@@ -215,8 +221,7 @@ export const FullCanvas = (props: PropsWithChildren<FullCanvasProps>) => {
             borderRadius={borderRadius}
             hologramMask={props.hologramMask}
             maskTransform={maskTransform}
-            gradientStart={gradientStart}
-            gradientEnd={gradientEnd}
+            gradientPoints={gradientPoints}
           />
         )}
 
@@ -225,8 +230,7 @@ export const FullCanvas = (props: PropsWithChildren<FullCanvasProps>) => {
             width={props.width}
             height={props.height}
             borderRadius={borderRadius}
-            gradientStart={gradientStart}
-            gradientEnd={gradientEnd}
+            gradientPoints={gradientPoints}
           />
         )}
       </Canvas>
