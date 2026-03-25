@@ -185,19 +185,16 @@ export const FullCanvas = (props: PropsWithChildren<FullCanvasProps>) => {
       <Canvas pointerEvents="none" style={absoluteCanvasStyle}>
         {props.showHoloBackground && image && (
           <ImageMaskReverse
-            image={holo_cover}
-            mask={image}
             width={props.width}
             height={props.height}
+            image={holo_cover}
+            mask={image}
           />
         )}
 
         <CardImageLayers
           width={props.width}
           height={props.height}
-          background={background}
-          image={image}
-          holoCover={holo_cover}
           holoColors={props.holoColors}
           showBackground={props.showBackground}
           showOutline={props.showOutline}
@@ -206,6 +203,9 @@ export const FullCanvas = (props: PropsWithChildren<FullCanvasProps>) => {
           showImage={props.showImage}
           showRGBSplit={props.showRGBSplit}
           showHoloMask={props.showHoloMask}
+          background={background}
+          image={image}
+          holoCover={holo_cover}
           gradientStart={gradientStart}
           gradientEnd={gradientEnd}
         />
