@@ -13,14 +13,12 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import Card from "../container/card/card.tsx";
 import Controls from "../container/controls.tsx";
-import {
-  getRandomCardList,
-  HOLO_BACKGROUND_OPTIONS,
-  HOLO_COLOR_OPTIONS,
-  POKEMON_OPTIONS,
-  SHADER_OPTIONS,
-} from "../data/data.ts";
+import { getCardList } from "../data/data.ts";
 import { Color } from "@shopify/react-native-skia";
+import { HOLO_COLOR_OPTIONS } from "../data/data.colors.ts";
+import { POKEMON_OPTIONS } from "../data/data.pokemon.ts";
+import { HOLO_BACKGROUND_OPTIONS } from "../data/data.holo.ts";
+import { SHADER_OPTIONS } from "../data/data.shader.ts";
 
 export interface ICardData {
   source: number;
@@ -60,7 +58,7 @@ const Cards = () => {
   const [controlsVisible, setControlsVisible] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
 
-  const [cards, setCards] = useState<ICardData[]>(() => getRandomCardList(25));
+  const [cards, setCards] = useState<ICardData[]>(() => getCardList(100));
 
   const sliderRef = useRef<FlatList<ICardData> | null>(null);
 
