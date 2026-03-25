@@ -54,11 +54,21 @@ const zeroShared = {
   value: 0,
 } as SharedValue<number>;
 
+const GRADIENT_TRANSLATE_FACTOR = 0.35;
+const MASK_TRANSLATE_FACTOR = 0.2;
+const MILLISECONDS_TO_SECONDS = 0.001;
+
 export const FullCanvas = (props: PropsWithChildren<FullCanvasProps>) => {
   const isActive = props.isActive ?? true;
   const maxAngle = props.maxAngle ?? 15;
   const borderRadius = props.borderRadius ?? 12;
   const style = props.style;
+
+  const halfWidth = props.width * 0.5;
+  const halfHeight = props.height * 0.5;
+  const negativeWidth = -props.width;
+  const negativeHeight = -props.height;
+  const inverseMaxAngle = 1 / maxAngle;
 
   const gestureRotateX = props.motion?.gestureRotateX ?? zeroShared;
   const gestureRotateY = props.motion?.gestureRotateY ?? zeroShared;
@@ -70,7 +80,7 @@ export const FullCanvas = (props: PropsWithChildren<FullCanvasProps>) => {
   const clock = useClock();
 
   const time = useDerivedValue(() => {
-    return isActive ? clock.value / 1000 : 0;
+    return isActive ? clock.value * MILLISECONDS_TO_SECONDS : 0;
   }, [clock, isActive]);
 
   const totalRotateX = useDerivedValue(
@@ -84,20 +94,18 @@ export const FullCanvas = (props: PropsWithChildren<FullCanvasProps>) => {
   );
 
   const gradientPoints = useDerivedValue(() => {
-    const halfWidth = props.width * 0.5;
-    const halfHeight = props.height * 0.5;
-    const rotateXNorm = totalRotateX.value / maxAngle;
-    const rotateYNorm = totalRotateY.value / maxAngle;
-    const tx = sensorTranslateX.value * 0.35;
-    const ty = sensorTranslateY.value * 0.35;
+    const rotateXNorm = totalRotateX.value * inverseMaxAngle;
+    const rotateYNorm = totalRotateY.value * inverseMaxAngle;
+    const tx = sensorTranslateX.value * GRADIENT_TRANSLATE_FACTOR;
+    const ty = sensorTranslateY.value * GRADIENT_TRANSLATE_FACTOR;
 
     const centerX = halfWidth + halfWidth * rotateYNorm + tx;
     const centerY = halfHeight + halfHeight * rotateXNorm + ty;
 
     return {
       start: {
-        x: -props.width + centerX,
-        y: -props.height + centerY,
+        x: negativeWidth + centerX,
+        y: negativeHeight + centerY,
       },
       end: {
         x: props.width + centerX,
@@ -105,9 +113,13 @@ export const FullCanvas = (props: PropsWithChildren<FullCanvasProps>) => {
       },
     };
   }, [
+    halfWidth,
+    halfHeight,
+    negativeWidth,
+    negativeHeight,
+    inverseMaxAngle,
     props.width,
     props.height,
-    maxAngle,
     totalRotateX,
     totalRotateY,
     sensorTranslateX,
@@ -116,23 +128,10 @@ export const FullCanvas = (props: PropsWithChildren<FullCanvasProps>) => {
 
   const maskTransform = useDerivedValue(
     () => [
-      { translateX: sensorTranslateX.value * 0.2 },
-      { translateY: sensorTranslateY.value * 0.2 },
+      { translateX: sensorTranslateX.value * MASK_TRANSLATE_FACTOR },
+      { translateY: sensorTranslateY.value * MASK_TRANSLATE_FACTOR },
     ],
     [sensorTranslateX, sensorTranslateY],
-  );
-
-  const containerStyle = useMemo(
-    () => [
-      styles.container,
-      {
-        width: props.width,
-        height: props.height,
-        borderRadius,
-      },
-      style,
-    ],
-    [props.width, props.height, borderRadius, style],
   );
 
   const absoluteCanvasStyle = useMemo(
@@ -147,27 +146,14 @@ export const FullCanvas = (props: PropsWithChildren<FullCanvasProps>) => {
     [props.width, props.height, style],
   );
 
-  const childrenLayerStyle = useMemo(
-    () => [
-      StyleSheet.absoluteFillObject,
-      styles.childrenLayer,
-      {
-        width: props.width,
-        height: props.height,
-        borderRadius,
-      },
-    ],
-    [props.width, props.height, borderRadius],
-  );
-
   if (!props.shaderEffectRef.current) {
-    return <View style={containerStyle}>{props.children}</View>;
+    return <View style={absoluteCanvasStyle}>{props.children}</View>;
   }
 
   if (!isActive) {
     return (
-      <View style={containerStyle}>
-        <View style={childrenLayerStyle}>{props.children}</View>
+      <View style={absoluteCanvasStyle}>
+        <View style={absoluteCanvasStyle}>{props.children}</View>
       </View>
     );
   }
