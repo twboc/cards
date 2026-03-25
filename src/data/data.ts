@@ -26,6 +26,7 @@ import { HoloSilverScanShader } from "../assets/shader/HoloSilverScanShader";
 import { InkCloudDenseShader } from "../assets/shader/InkCloudDenseShader";
 import { InkCloudSmoothShader } from "../assets/shader/InkCloudSmooth";
 import { InkCloudShader } from "../assets/shader/InkCloudShader";
+import { KanagawaWaveShader } from "../assets/shader/KanagawaWaveShader";
 import { LiquidMetalShader } from "../assets/shader/LiquidMetalShader";
 import { LiquidMetalColourShader } from "../assets/shader/LiquidMetalColourShader";
 import { LSDShader } from "../assets/shader/LSDShader";
@@ -44,6 +45,7 @@ export const SHADER_OPTIONS = [
   { label: "Ink Cloud Dense", value: InkCloudDenseShader },
   { label: "Ink Cloud Smooth", value: InkCloudSmoothShader },
   { label: "Ink Cloud", value: InkCloudShader },
+  { label: "Kanagawa Wave", value: KanagawaWaveShader },
   { label: "Liquid Metal", value: LiquidMetalShader },
   { label: "Liquid Metal Colour", value: LiquidMetalColourShader },
   { label: "LSD", value: LSDShader },
