@@ -6,7 +6,7 @@ import {
   SkRuntimeEffect,
 } from "@shopify/react-native-skia";
 import { StyleProp, ViewStyle } from "react-native";
-import { GestureContainerMotion } from "../gesture";
+import { GestureContainerMotion } from "../gesture/gesture";
 import { HoloColorPalette } from "../../data/data";
 
 export default interface FullCanvasProps {

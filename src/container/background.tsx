@@ -1,4 +1,4 @@
-import { FC, ReactNode } from "react";
+import React, { memo, RefObject } from "react";
 import {
   Fill,
   Mask,
@@ -8,44 +8,64 @@ import {
 } from "@shopify/react-native-skia";
 import { SharedValue, useDerivedValue } from "react-native-reanimated";
 
-interface BackgrdoundProps {
+type BackgrdoundProps = {
   width: number;
   height: number;
   borderRadius: number;
-  shaderEffectRef: React.RefObject<SkRuntimeEffect | null>;
+  shaderEffectRef: RefObject<SkRuntimeEffect | null>;
   time: SharedValue<number>;
-  children?: ReactNode;
-}
+};
 
-export const Backgrdound: FC<BackgrdoundProps> = (props) => {
-  if (props.shaderEffectRef.current == null) {
+const ZERO = 0;
+const MASK_MODE = "alpha" as const;
+const MASK_COLOR = "white";
+
+const BackgrdoundComponent = (props: BackgrdoundProps) => {
+  const shaderEffect = props.shaderEffectRef.current;
+
+  if (shaderEffect == null) {
     return null;
   }
 
-  const uniforms = useDerivedValue(() => {
-    return {
+  const uniforms = useDerivedValue(
+    () => ({
       iTime: props.time.value,
       iResolution: [props.width, props.height],
-    };
-  }, [props.width, props.height, props.time]);
+    }),
+    [props.time, props.width, props.height],
+  );
 
   return (
     <Mask
-      mode="alpha"
+      mode={MASK_MODE}
       mask={
         <RoundedRect
-          x={0}
-          y={0}
+          x={ZERO}
+          y={ZERO}
           r={props.borderRadius}
           width={props.width}
           height={props.height}
-          color="white"
+          color={MASK_COLOR}
         />
       }
     >
       <Fill>
-        <Shader source={props.shaderEffectRef.current} uniforms={uniforms} />
+        <Shader source={shaderEffect} uniforms={uniforms} />
       </Fill>
     </Mask>
   );
 };
+
+export const Backgrdound = memo(
+  BackgrdoundComponent,
+  (prev, next) =>
+    prev.width === next.width &&
+    prev.height === next.height &&
+    prev.borderRadius === next.borderRadius &&
+    prev.shaderEffectRef === next.shaderEffectRef &&
+    prev.time === next.time,
+);
+
+Backgrdound.displayName = "Backgrdound";
+
+export default Backgrdound;

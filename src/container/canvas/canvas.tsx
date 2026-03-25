@@ -95,13 +95,13 @@ const FullCanvasComponent: FC<FullCanvasProps> = (props) => {
   if (!props.shaderEffectRef.current) {
     return (
       <View style={containerStyle}>
-        <OverlayComponent visible={props.perfMonitor} title="FullCanvas" />
+        <OverlayComponent visible={props.perfMonitor} title="Card Canvas" />
       </View>
     );
   }
 
   return (
-    <ProfilerComponent id="FullCanvas" monitor={props.perfMonitor}>
+    <ProfilerComponent id="CardCanvas" monitor={props.perfMonitor}>
       <View style={containerStyle}>
         <CanvasComponent
           {...(canvasMonitorProps ?? {})}
@@ -116,7 +116,6 @@ const FullCanvasComponent: FC<FullCanvasProps> = (props) => {
             time={time}
             shaderEffectRef={props.shaderEffectRef}
           />
-
           <HoloBackgroundLayer
             visible={showHoloBackgroundLayer}
             width={props.width}
@@ -124,7 +123,6 @@ const FullCanvasComponent: FC<FullCanvasProps> = (props) => {
             image={props.image}
             holoCover={props.holoCover}
           />
-
           <CardImageRenderLayer
             width={props.width}
             height={props.height}
@@ -141,7 +139,6 @@ const FullCanvasComponent: FC<FullCanvasProps> = (props) => {
             holoCover={props.holoCover}
             gradientPoints={showOutlineHoloLayer ? gradientPoints : undefined}
           />
-
           <HologramRenderLayer
             visible={showHologramLayer}
             width={props.width}
@@ -152,7 +149,6 @@ const FullCanvasComponent: FC<FullCanvasProps> = (props) => {
             maskTransform={maskTransform}
             gradientPoints={gradientPoints}
           />
-
           <GlossRenderLayer
             visible={props.showGloss}
             width={props.width}
@@ -161,8 +157,7 @@ const FullCanvasComponent: FC<FullCanvasProps> = (props) => {
             gradientPoints={gradientPoints}
           />
         </CanvasComponent>
-
-        <OverlayComponent visible={props.perfMonitor} title="FullCanvas" />
+        <OverlayComponent visible={props.perfMonitor} title="Card Canvas" />
       </View>
     </ProfilerComponent>
   );

@@ -153,7 +153,7 @@ export function useFullCanvasMemoValues(params: {
   const canvasMonitorProps = useMemo(
     () =>
       params.perfMonitor
-        ? { monitor: true as const, monitorId: "fullcanvas-main" }
+        ? { monitor: true as const, monitorId: "cardcanvas-main" }
         : undefined,
     [params.perfMonitor],
   );

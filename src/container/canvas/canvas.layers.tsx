@@ -35,8 +35,6 @@ export const ShaderLayer = memo((props: ShaderLayerProps) => {
   );
 });
 
-ShaderLayer.displayName = "ShaderLayer";
-
 type HoloBackgroundLayerProps = {
   visible: boolean;
   width: number;
@@ -60,8 +58,6 @@ export const HoloBackgroundLayer = memo((props: HoloBackgroundLayerProps) => {
   );
 });
 
-HoloBackgroundLayer.displayName = "HoloBackgroundLayer";
-
 type CardImageRenderLayerProps = {
   width: number;
   height: number;
@@ -82,8 +78,6 @@ type CardImageRenderLayerProps = {
 export const CardImageRenderLayer = memo((props: CardImageRenderLayerProps) => {
   return <CardImageLayers {...props} />;
 });
-
-CardImageRenderLayer.displayName = "CardImageRenderLayer";
 
 type HologramRenderLayerProps = {
   visible: boolean;
@@ -114,8 +108,6 @@ export const HologramRenderLayer = memo((props: HologramRenderLayerProps) => {
   );
 });
 
-HologramRenderLayer.displayName = "HologramRenderLayer";
-
 type GlossRenderLayerProps = {
   visible: boolean;
   width: number;
@@ -139,8 +131,6 @@ export const GlossRenderLayer = memo((props: GlossRenderLayerProps) => {
   );
 });
 
-GlossRenderLayer.displayName = "GlossRenderLayer";
-
 type PerfOverlayLayerProps = {
   visible: boolean;
   title?: string;
@@ -149,5 +139,3 @@ type PerfOverlayLayerProps = {
 export const PerfOverlayLayer = memo((props: PerfOverlayLayerProps) => {
   return <PerformanceOverlay visible={props.visible} title={props.title} />;
 });
-
-PerfOverlayLayer.displayName = "PerfOverlayLayer";

@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import Card from "../container/card.tsx";
+import Card from "../container/card/card.tsx";
 import Controls from "../container/controls.tsx";
 import {
   getRandomCardList,
