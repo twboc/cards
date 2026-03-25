@@ -286,7 +286,7 @@ export const FullCanvas = (props: PropsWithChildren<FullCanvasProps>) => {
           />
         )}
 
-        <ImageMask
+        {/* <ImageMask
           image={
             <HoloShine
               width={props.width}
@@ -302,7 +302,7 @@ export const FullCanvas = (props: PropsWithChildren<FullCanvasProps>) => {
           width={props.width}
           height={props.height}
           mode="luminance"
-        />
+        /> */}
 
         {props.showImage && (
           <Image image={image} width={props.width} height={props.height} />
