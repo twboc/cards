@@ -6,19 +6,11 @@ import {
   useRef,
   useState,
 } from "react";
-import {
-  DerivedValue,
-  SharedValue,
-  useDerivedValue,
-} from "react-native-reanimated";
+import { SharedValue, useDerivedValue } from "react-native-reanimated";
 import {
   Canvas,
   DataSourceParam,
-  Group,
   Image,
-  LinearGradient,
-  Mask,
-  RoundedRect,
   Skia,
   useAnimatedImageValue,
   useImage,
@@ -33,6 +25,9 @@ import ImageMask from "./imagemask";
 import ImageMaskReverse from "./imagemaskreverse";
 import { Outline } from "./outline";
 import HoloColver02 from "../assets/effect/holo_cover_02.gif";
+import HoloShine from "../component/holoShine";
+import HologramLayer from "../component/hologramLayer";
+import GlossLayer from "../component/glossLayer";
 
 interface FullCanvasProps {
   showImage: boolean;
@@ -67,13 +62,15 @@ const TARGET_FPS = 30;
 const FRAME_DURATION = 1000 / TARGET_FPS;
 
 export const FullCanvas = (props: PropsWithChildren<FullCanvasProps>) => {
-  const isActive = props.isActive || true;
-  const maxAngle = props.maxAngle || 15;
-  const borderRadius = props.borderRadius || 12;
-  const style = props.style || {};
+  const isActive = props.isActive ?? true;
+  const maxAngle = props.maxAngle ?? 15;
+  const borderRadius = props.borderRadius ?? 12;
+  const style = props.style ?? {};
+
   const background = useImage(backgroundSource);
   const image = useImage(props.source);
   const holo_cover = useAnimatedImageValue(HoloColver02);
+  const hologramMask = useImage(props.hologramMaskSource);
 
   const [time, setTime] = useState(0);
 
@@ -81,8 +78,6 @@ export const FullCanvas = (props: PropsWithChildren<FullCanvasProps>) => {
   const mountedRef = useRef(true);
   const lastFrameTimeRef = useRef(0);
   const startTimeRef = useRef(0);
-
-  const hologramMask = useImage(props.hologramMaskSource);
 
   const gestureRotateX = props.motion?.gestureRotateX ?? zeroShared;
   const gestureRotateY = props.motion?.gestureRotateY ?? zeroShared;
@@ -196,7 +191,7 @@ export const FullCanvas = (props: PropsWithChildren<FullCanvasProps>) => {
       {
         width: props.width,
         height: props.height,
-        borderRadius: props.borderRadius,
+        borderRadius,
       },
       style,
     ],
@@ -210,7 +205,7 @@ export const FullCanvas = (props: PropsWithChildren<FullCanvasProps>) => {
       {
         width: props.width,
         height: props.height,
-        borderRadius: props.borderRadius,
+        borderRadius,
       },
     ],
     [props.width, props.height, borderRadius],
@@ -227,101 +222,6 @@ export const FullCanvas = (props: PropsWithChildren<FullCanvasProps>) => {
       </View>
     );
   }
-
-  const HoloShine = (props: {
-    width: number;
-    height: number;
-    gradientStart: DerivedValue<{
-      x: number;
-      y: number;
-    }>;
-    gradientEnd: DerivedValue<{
-      x: number;
-      y: number;
-    }>;
-  }) => {
-    return (
-      <RoundedRect x={0} y={0} r={17} width={props.width} height={props.height}>
-        <LinearGradient
-          start={props.gradientStart}
-          end={props.gradientEnd}
-          colors={[
-            "#ff3b30",
-            "#ff9500",
-            "#ffcc00",
-            "#4cd964",
-            "#34aadc",
-            "#5856d6",
-            "#2e2d87",
-          ]}
-        />
-      </RoundedRect>
-    );
-  };
-
-  const renderHologramLayer = () => (
-    <Group blendMode="overlay">
-      <Mask
-        mask={
-          <RoundedRect
-            x={0}
-            y={0}
-            r={12}
-            width={props.width}
-            height={props.height}
-          >
-            <LinearGradient
-              start={gradientStart}
-              end={gradientEnd}
-              colors={[
-                "rgba(0, 0, 0, 0)",
-                "rgba(255, 255, 255, 0.8)",
-                "rgba(0, 0, 0, 0)",
-                "rgba(255, 255, 255, 0.7)",
-                "rgba(0, 0, 0, 0)",
-              ]}
-              positions={[0, 0.35, 0.5, 0.65, 1]}
-            />
-          </RoundedRect>
-        }
-        mode="luminance"
-      >
-        <Group transform={maskTransform}>
-          <Image
-            image={hologramMask}
-            width={props.width}
-            height={props.height}
-            fit="cover"
-          />
-        </Group>
-        <HoloShine
-          width={props.width}
-          height={props.height}
-          gradientStart={gradientStart}
-          gradientEnd={gradientEnd}
-        />
-      </Mask>
-    </Group>
-  );
-
-  const renderGlossLayer = () => {
-    return (
-      <RoundedRect x={0} y={0} r={12} width={props.width} height={props.height}>
-        <LinearGradient
-          start={gradientStart}
-          end={gradientEnd}
-          colors={[
-            "rgba(0, 0, 0, 0)",
-            "rgba(255, 255, 255, 0.3)",
-            "rgba(0, 0, 0, 0)",
-            "rgba(255, 255, 255, 0.2)",
-            "rgba(0, 0, 0, 0)",
-          ]}
-          positions={[0, 0.35, 0.5, 0.65, 1]}
-        />
-      </RoundedRect>
-    );
-  };
 
   return (
     <>
@@ -360,9 +260,9 @@ export const FullCanvas = (props: PropsWithChildren<FullCanvasProps>) => {
         {props.showBackground && (
           <Image
             image={background}
-            width={props.width + 0}
+            width={props.width}
             height={props.height}
-            fit={"cover"}
+            fit="cover"
           />
         )}
 
@@ -382,27 +282,26 @@ export const FullCanvas = (props: PropsWithChildren<FullCanvasProps>) => {
             }
             width={props.width}
             height={props.height}
-            mode={"luminance"}
+            mode="luminance"
           />
         )}
 
         <ImageMask
           image={
-            <>
-              <HoloShine
-                width={props.width}
-                height={props.height}
-                gradientStart={gradientStart}
-                gradientEnd={gradientEnd}
-              />
-            </>
+            <HoloShine
+              width={props.width}
+              height={props.height}
+              borderRadius={17}
+              gradientStart={gradientStart}
+              gradientEnd={gradientEnd}
+            />
           }
           mask={
             <Outline image={image} width={props.width} height={props.height} />
           }
           width={props.width}
           height={props.height}
-          mode={"luminance"}
+          mode="luminance"
         />
 
         {props.showImage && (
@@ -412,17 +311,20 @@ export const FullCanvas = (props: PropsWithChildren<FullCanvasProps>) => {
         {props.showRGBSplit && (
           <RGBSplit image={image} width={props.width} height={props.height} />
         )}
+
         {props.showHoloMask && (
           <ImageMask
             image={holo_cover}
             mask={image}
             width={props.width}
             height={props.height}
-            mode={"luminance"}
+            mode="luminance"
           />
         )}
       </Canvas>
+
       {props.children}
+
       <Canvas
         pointerEvents="none"
         style={[
@@ -434,10 +336,27 @@ export const FullCanvas = (props: PropsWithChildren<FullCanvasProps>) => {
           style,
         ]}
       >
-        {props.showHologram &&
-          props.hologramMaskSource &&
-          renderHologramLayer()}
-        {props.showGloss && renderGlossLayer()}
+        {props.showHologram && props.hologramMaskSource && (
+          <HologramLayer
+            width={props.width}
+            height={props.height}
+            borderRadius={borderRadius}
+            hologramMask={hologramMask}
+            maskTransform={maskTransform}
+            gradientStart={gradientStart}
+            gradientEnd={gradientEnd}
+          />
+        )}
+
+        {props.showGloss && (
+          <GlossLayer
+            width={props.width}
+            height={props.height}
+            borderRadius={borderRadius}
+            gradientStart={gradientStart}
+            gradientEnd={gradientEnd}
+          />
+        )}
       </Canvas>
     </>
   );
