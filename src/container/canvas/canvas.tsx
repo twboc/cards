@@ -1,39 +1,39 @@
-import React, { FC, memo, PropsWithChildren, useMemo } from "react";
-import { useDerivedValue } from "react-native-reanimated";
-import { Canvas, Transforms3d, useClock } from "@shopify/react-native-skia";
-import { StyleSheet, View } from "react-native";
-import { Backgrdound } from "../background";
-import ImageMaskReverse from "../imagemaskreverse";
-import HologramLayer from "../../component/hologramLayer";
-import GlossLayer from "../../component/glossLayer";
-import CardImageLayers from "../../component/cardImageLayers";
+import React, { FC, memo } from "react";
+import { Canvas, useClock } from "@shopify/react-native-skia";
+import { View } from "react-native";
 import {
   MonitoredCanvas,
   MonitoredComponentProfiler,
-  PerformanceOverlay,
   useJsFpsMonitor,
 } from "../monitor";
 import {
   DEFAULT_BORDER_RADIUS,
   DEFAULT_MAX_ANGLE,
-  GRADIENT_TRANSLATE_FACTOR,
-  MASK_TRANSLATE_FACTOR,
-  MILLISECONDS_TO_SECONDS,
-  ZERO_GRADIENT_POINTS,
   zeroShared,
 } from "../../const/const";
-import { GradientPoints } from "../../type/type";
 import FullCanvasProps from "./canvas.type";
 import { NoopOverlay, NoopWrapper } from "./canvas.noop";
+import {
+  CardImageRenderLayer,
+  GlossRenderLayer,
+  HoloBackgroundLayer,
+  HologramRenderLayer,
+  PerfOverlayLayer,
+  ShaderLayer,
+} from "./canvas.layers";
+import {
+  useFullCanvasDerivedValues,
+  useFullCanvasMemoValues,
+} from "./canvas.hooks";
 
-const FullCanvasComponent: FC<PropsWithChildren<FullCanvasProps>> = (props) => {
+const FullCanvasComponent: FC<FullCanvasProps> = (props) => {
   useJsFpsMonitor(props.perfMonitor);
 
   const CanvasComponent = props.perfMonitor ? MonitoredCanvas : Canvas;
   const ProfilerComponent = props.perfMonitor
     ? MonitoredComponentProfiler
     : NoopWrapper;
-  const OverlayComponent = props.perfMonitor ? PerformanceOverlay : NoopOverlay;
+  const OverlayComponent = props.perfMonitor ? PerfOverlayLayer : NoopOverlay;
 
   const maxAngle = props.maxAngle ?? DEFAULT_MAX_ANGLE;
   const borderRadius = props.borderRadius ?? DEFAULT_BORDER_RADIUS;
@@ -61,245 +61,41 @@ const FullCanvasComponent: FC<PropsWithChildren<FullCanvasProps>> = (props) => {
 
   const clock = useClock();
 
-  const time = useDerivedValue(() => {
-    return clock.value * MILLISECONDS_TO_SECONDS;
-  }, [clock]);
-
-  const totalRotateX = useDerivedValue(
-    () => gestureRotateX.value + sensorRotateX.value,
-    [gestureRotateX, sensorRotateX],
-  );
-
-  const totalRotateY = useDerivedValue(
-    () => gestureRotateY.value + sensorRotateY.value,
-    [gestureRotateY, sensorRotateY],
-  );
-
-  const gradientPoints = useDerivedValue<GradientPoints>(() => {
-    if (!needsGradient) {
-      return {
-        start: ZERO_GRADIENT_POINTS.start,
-        end: { x: props.width, y: props.height },
-      };
-    }
-
-    const rotateXNorm = totalRotateX.value * inverseMaxAngle;
-    const rotateYNorm = totalRotateY.value * inverseMaxAngle;
-    const tx = sensorTranslateX.value * GRADIENT_TRANSLATE_FACTOR;
-    const ty = sensorTranslateY.value * GRADIENT_TRANSLATE_FACTOR;
-
-    const centerX = halfWidth + halfWidth * rotateYNorm + tx;
-    const centerY = halfHeight + halfHeight * rotateXNorm + ty;
-
-    return {
-      start: {
-        x: negativeWidth + centerX,
-        y: negativeHeight + centerY,
-      },
-      end: {
-        x: props.width + centerX,
-        y: props.height + centerY,
-      },
-    };
-  }, [
-    needsGradient,
+  const { time, gradientPoints, maskTransform } = useFullCanvasDerivedValues({
+    clock,
+    width: props.width,
+    height: props.height,
+    borderRadius,
+    inverseMaxAngle,
     halfWidth,
     halfHeight,
     negativeWidth,
     negativeHeight,
-    inverseMaxAngle,
-    props.width,
-    props.height,
-    totalRotateX,
-    totalRotateY,
+    needsGradient,
+    needsMaskTransform,
+    gestureRotateX,
+    gestureRotateY,
+    sensorRotateX,
+    sensorRotateY,
     sensorTranslateX,
     sensorTranslateY,
-  ]);
+    perfMonitor: props.perfMonitor,
+    style: props.style,
+  });
 
-  const maskTransform = useDerivedValue<Transforms3d>(() => {
-    if (!needsMaskTransform) {
-      return [{ translateX: 0 }, { translateY: 0 }];
-    }
-
-    return [
-      { translateX: sensorTranslateX.value * MASK_TRANSLATE_FACTOR },
-      { translateY: sensorTranslateY.value * MASK_TRANSLATE_FACTOR },
-    ];
-  }, [needsMaskTransform, sensorTranslateX, sensorTranslateY]);
-
-  const containerStyle = useMemo(
-    () => [
-      styles.container,
-      {
-        width: props.width,
-        height: props.height,
-        borderRadius,
-      },
-      props.style,
-    ],
-    [props.width, props.height, borderRadius, props.style],
-  );
-
-  const absoluteCanvasStyle = useMemo(
-    () => [
-      StyleSheet.absoluteFill,
-      {
-        width: props.width,
-        height: props.height,
-      },
-      props.style,
-    ],
-    [props.width, props.height, props.style],
-  );
-
-  const canvasMonitorProps = useMemo(
-    () =>
-      props.perfMonitor
-        ? { monitor: true as const, monitorId: "fullcanvas-main" }
-        : undefined,
-    [props.perfMonitor],
-  );
-
-  const shaderNode = useMemo(() => {
-    if (!props.showShaderBack) {
-      return null;
-    }
-
-    return (
-      <Backgrdound
-        width={props.width}
-        height={props.height}
-        borderRadius={borderRadius}
-        time={time}
-        shaderEffectRef={props.shaderEffectRef}
-      />
-    );
-  }, [
-    props.showShaderBack,
-    props.width,
-    props.height,
-    borderRadius,
-    time,
-    props.shaderEffectRef,
-  ]);
-
-  const holoBackgroundNode = useMemo(() => {
-    if (!showHoloBackgroundLayer || !props.image) {
-      return null;
-    }
-
-    return (
-      <ImageMaskReverse
-        width={props.width}
-        height={props.height}
-        image={props.holoCover}
-        mask={props.image}
-      />
-    );
-  }, [
-    showHoloBackgroundLayer,
-    props.image,
-    props.width,
-    props.height,
-    props.holoCover,
-  ]);
-
-  const cardImageLayersNode = useMemo(
-    () => (
-      <CardImageLayers
-        width={props.width}
-        height={props.height}
-        holoColors={props.holoColors}
-        showBackground={props.showBackground}
-        showOutline={props.showOutline}
-        showOutlineMask={props.showOutlineMask}
-        showOutlineHolo={props.showOutlineHolo}
-        showImage={props.showImage}
-        showRGBSplit={props.showRGBSplit}
-        showHoloMask={props.showHoloMask}
-        background={props.background}
-        image={props.image}
-        holoCover={props.holoCover}
-        gradientPoints={showOutlineHoloLayer ? gradientPoints : undefined}
-      />
-    ),
-    [
-      props.width,
-      props.height,
-      props.holoColors,
-      props.showBackground,
-      props.showOutline,
-      props.showOutlineMask,
-      props.showOutlineHolo,
-      props.showImage,
-      props.showRGBSplit,
-      props.showHoloMask,
-      props.background,
-      props.image,
-      props.holoCover,
-      showOutlineHoloLayer,
-      gradientPoints,
-    ],
-  );
-
-  const hologramLayerNode = useMemo(() => {
-    if (!showHologramLayer) {
-      return null;
-    }
-
-    return (
-      <HologramLayer
-        width={props.width}
-        height={props.height}
-        holoColors={props.holoColors}
-        borderRadius={borderRadius}
-        hologramMask={props.hologramMask}
-        maskTransform={maskTransform}
-        gradientPoints={gradientPoints}
-      />
-    );
-  }, [
-    showHologramLayer,
-    props.width,
-    props.height,
-    props.holoColors,
-    borderRadius,
-    props.hologramMask,
-    maskTransform,
-    gradientPoints,
-  ]);
-
-  const glossLayerNode = useMemo(() => {
-    if (!props.showGloss) {
-      return null;
-    }
-
-    return (
-      <GlossLayer
-        width={props.width}
-        height={props.height}
-        borderRadius={borderRadius}
-        gradientPoints={gradientPoints}
-      />
-    );
-  }, [
-    props.showGloss,
-    props.width,
-    props.height,
-    borderRadius,
-    gradientPoints,
-  ]);
-
-  const overlayNode = useMemo(
-    () => <OverlayComponent visible={props.perfMonitor} title="FullCanvas" />,
-    [OverlayComponent, props.perfMonitor],
-  );
+  const { containerStyle, absoluteCanvasStyle, canvasMonitorProps } =
+    useFullCanvasMemoValues({
+      width: props.width,
+      height: props.height,
+      borderRadius,
+      style: props.style,
+      perfMonitor: props.perfMonitor,
+    });
 
   if (!props.shaderEffectRef.current) {
     return (
       <View style={containerStyle}>
-        {props.children}
-        {overlayNode}
+        <OverlayComponent visible={props.perfMonitor} title="FullCanvas" />
       </View>
     );
   }
@@ -312,14 +108,61 @@ const FullCanvasComponent: FC<PropsWithChildren<FullCanvasProps>> = (props) => {
           pointerEvents="none"
           style={absoluteCanvasStyle}
         >
-          {shaderNode}
-          {holoBackgroundNode}
-          {cardImageLayersNode}
-          {hologramLayerNode}
-          {glossLayerNode}
+          <ShaderLayer
+            visible={props.showShaderBack}
+            width={props.width}
+            height={props.height}
+            borderRadius={borderRadius}
+            time={time}
+            shaderEffectRef={props.shaderEffectRef}
+          />
+
+          <HoloBackgroundLayer
+            visible={showHoloBackgroundLayer}
+            width={props.width}
+            height={props.height}
+            image={props.image}
+            holoCover={props.holoCover}
+          />
+
+          <CardImageRenderLayer
+            width={props.width}
+            height={props.height}
+            holoColors={props.holoColors}
+            showBackground={props.showBackground}
+            showOutline={props.showOutline}
+            showOutlineMask={props.showOutlineMask}
+            showOutlineHolo={props.showOutlineHolo}
+            showImage={props.showImage}
+            showRGBSplit={props.showRGBSplit}
+            showHoloMask={props.showHoloMask}
+            background={props.background}
+            image={props.image}
+            holoCover={props.holoCover}
+            gradientPoints={showOutlineHoloLayer ? gradientPoints : undefined}
+          />
+
+          <HologramRenderLayer
+            visible={showHologramLayer}
+            width={props.width}
+            height={props.height}
+            holoColors={props.holoColors}
+            borderRadius={borderRadius}
+            hologramMask={props.hologramMask}
+            maskTransform={maskTransform}
+            gradientPoints={gradientPoints}
+          />
+
+          <GlossRenderLayer
+            visible={props.showGloss}
+            width={props.width}
+            height={props.height}
+            borderRadius={borderRadius}
+            gradientPoints={gradientPoints}
+          />
         </CanvasComponent>
-        {props.children}
-        {overlayNode}
+
+        <OverlayComponent visible={props.perfMonitor} title="FullCanvas" />
       </View>
     </ProfilerComponent>
   );
@@ -354,15 +197,7 @@ export const FullCanvas = memo(
     prev.image === next.image &&
     prev.holoCover === next.holoCover &&
     prev.hologramMask === next.hologramMask &&
-    prev.shaderEffectRef === next.shaderEffectRef &&
-    prev.children === next.children,
+    prev.shaderEffectRef === next.shaderEffectRef,
 );
 
 export default FullCanvas;
-
-const styles = StyleSheet.create({
-  container: {
-    overflow: "hidden",
-    position: "relative",
-  },
-});
