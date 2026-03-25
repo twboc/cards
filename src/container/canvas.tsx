@@ -1,17 +1,11 @@
-import {
-  PropsWithChildren,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { PropsWithChildren, useMemo, useRef } from "react";
 import { SharedValue, useDerivedValue } from "react-native-reanimated";
 import {
   Canvas,
   DataSourceParam,
   Skia,
   useAnimatedImageValue,
+  useClock,
   useImage,
 } from "@shopify/react-native-skia";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
@@ -57,26 +51,17 @@ const zeroShared = {
   value: 0,
 } as SharedValue<number>;
 
-const TARGET_FPS = 30;
-const FRAME_DURATION = 1000 / TARGET_FPS;
-
 export const FullCanvas = (props: PropsWithChildren<FullCanvasProps>) => {
   const isActive = props.isActive ?? true;
   const maxAngle = props.maxAngle ?? 15;
   const borderRadius = props.borderRadius ?? 12;
-  const style = props.style ?? {};
+  const style = props.style;
 
   const background = useImage(backgroundSource);
   const image = useImage(props.source);
   const holo_cover = useAnimatedImageValue(HoloColver02);
   const hologramMask = useImage(props.hologramMaskSource);
-
-  const [time, setTime] = useState(0);
-
-  const requestRef = useRef<number | null>(null);
-  const mountedRef = useRef(true);
-  const lastFrameTimeRef = useRef(0);
-  const startTimeRef = useRef(0);
+  const shaderEffectRef = useRef(Skia.RuntimeEffect.Make(props.shader.current));
 
   const gestureRotateX = props.motion?.gestureRotateX ?? zeroShared;
   const gestureRotateY = props.motion?.gestureRotateY ?? zeroShared;
@@ -85,7 +70,11 @@ export const FullCanvas = (props: PropsWithChildren<FullCanvasProps>) => {
   const sensorTranslateX = props.motion?.sensorTranslateX ?? zeroShared;
   const sensorTranslateY = props.motion?.sensorTranslateY ?? zeroShared;
 
-  const shaderEffectRef = useRef(Skia.RuntimeEffect.Make(props.shader.current));
+  const clock = useClock();
+
+  const time = useDerivedValue(() => {
+    return isActive ? clock.value / 1000 : 0;
+  }, [clock, isActive]);
 
   const totalRotateX = useDerivedValue(
     () => gestureRotateX.value + sensorRotateX.value,
@@ -129,61 +118,6 @@ export const FullCanvas = (props: PropsWithChildren<FullCanvasProps>) => {
     [sensorTranslateX, sensorTranslateY],
   );
 
-  const stopAnimation = useCallback(() => {
-    if (requestRef.current != null) {
-      cancelAnimationFrame(requestRef.current);
-      requestRef.current = null;
-    }
-  }, []);
-
-  const animate = useCallback(
-    (timestamp: number) => {
-      if (!mountedRef.current || !isActive) {
-        return;
-      }
-
-      if (startTimeRef.current === 0) {
-        startTimeRef.current = timestamp;
-      }
-
-      if (
-        lastFrameTimeRef.current === 0 ||
-        timestamp - lastFrameTimeRef.current >= FRAME_DURATION
-      ) {
-        lastFrameTimeRef.current = timestamp;
-        const elapsedSeconds = (timestamp - startTimeRef.current) / 1000;
-        setTime(elapsedSeconds);
-      }
-
-      requestRef.current = requestAnimationFrame(animate);
-    },
-    [isActive],
-  );
-
-  useEffect(() => {
-    mountedRef.current = true;
-
-    if (!isActive) {
-      stopAnimation();
-      return;
-    }
-
-    lastFrameTimeRef.current = 0;
-    startTimeRef.current = 0;
-    requestRef.current = requestAnimationFrame(animate);
-
-    return () => {
-      stopAnimation();
-    };
-  }, [animate, isActive, stopAnimation]);
-
-  useEffect(() => {
-    return () => {
-      mountedRef.current = false;
-      stopAnimation();
-    };
-  }, [stopAnimation]);
-
   const containerStyle = useMemo(
     () => [
       styles.container,
@@ -195,6 +129,18 @@ export const FullCanvas = (props: PropsWithChildren<FullCanvasProps>) => {
       style,
     ],
     [props.width, props.height, borderRadius, style],
+  );
+
+  const absoluteCanvasStyle = useMemo(
+    () => [
+      StyleSheet.absoluteFill,
+      {
+        width: props.width,
+        height: props.height,
+      },
+      style,
+    ],
+    [props.width, props.height, style],
   );
 
   const childrenLayerStyle = useMemo(
@@ -224,17 +170,7 @@ export const FullCanvas = (props: PropsWithChildren<FullCanvasProps>) => {
 
   return (
     <>
-      <Canvas
-        pointerEvents="none"
-        style={[
-          StyleSheet.absoluteFill,
-          {
-            width: props.width,
-            height: props.height,
-          },
-          style,
-        ]}
-      >
+      <Canvas pointerEvents="none" style={absoluteCanvasStyle}>
         {props.showShaderBack && (
           <BackgrdoundShader
             width={props.width}
@@ -246,7 +182,7 @@ export const FullCanvas = (props: PropsWithChildren<FullCanvasProps>) => {
         )}
       </Canvas>
 
-      <Canvas style={stylesimage.canvas}>
+      <Canvas pointerEvents="none" style={absoluteCanvasStyle}>
         {props.showHoloBackground && image && (
           <ImageMaskReverse
             image={holo_cover}
@@ -273,21 +209,7 @@ export const FullCanvas = (props: PropsWithChildren<FullCanvasProps>) => {
           gradientStart={gradientStart}
           gradientEnd={gradientEnd}
         />
-      </Canvas>
 
-      {props.children}
-
-      <Canvas
-        pointerEvents="none"
-        style={[
-          StyleSheet.absoluteFill,
-          {
-            width: props.width,
-            height: props.height,
-          },
-          style,
-        ]}
-      >
         {props.showHologram && props.hologramMaskSource && (
           <HologramLayer
             width={props.width}
@@ -314,14 +236,6 @@ export const FullCanvas = (props: PropsWithChildren<FullCanvasProps>) => {
     </>
   );
 };
-
-const stylesimage = StyleSheet.create({
-  centeredView: {
-    paddingTop: 30,
-    alignItems: "center",
-  },
-  canvas: { flex: 1 },
-});
 
 const styles = StyleSheet.create({
   container: {

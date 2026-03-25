@@ -6,20 +6,29 @@ import {
   Shader,
   SkRuntimeEffect,
 } from "@shopify/react-native-skia";
+import { SharedValue, useDerivedValue } from "react-native-reanimated";
 
 interface BackgrdoundShaderProps {
   width: number;
   height: number;
   borderRadius: number;
   shaderEffectRef: React.RefObject<SkRuntimeEffect | null>;
-  time: number;
+  time: SharedValue<number>;
   children?: ReactNode;
 }
 
 export const BackgrdoundShader: FC<BackgrdoundShaderProps> = (props) => {
   if (props.shaderEffectRef.current == null) {
-    return <></>;
+    return null;
   }
+
+  const uniforms = useDerivedValue(() => {
+    return {
+      iTime: props.time.value,
+      iResolution: [props.width, props.height],
+    };
+  }, [props.width, props.height, props.time]);
+
   return (
     <Mask
       mode="alpha"
@@ -35,13 +44,7 @@ export const BackgrdoundShader: FC<BackgrdoundShaderProps> = (props) => {
       }
     >
       <Fill>
-        <Shader
-          source={props.shaderEffectRef.current}
-          uniforms={{
-            iTime: props.time,
-            iResolution: [props.width, props.height],
-          }}
-        />
+        <Shader source={props.shaderEffectRef.current} uniforms={uniforms} />
       </Fill>
     </Mask>
   );
