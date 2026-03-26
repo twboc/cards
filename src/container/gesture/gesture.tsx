@@ -13,6 +13,7 @@ import {
   SensorTypes,
 } from "react-native-sensors";
 import {
+  DEFAULT_MAX_ANGLE,
   ROTATION_EPSILON,
   SENSOR_INTERVAL_MS,
   TIMING_CONFIG,
@@ -24,13 +25,10 @@ import style, {
   useGestureContainerAnimatedStyles,
   useGestureContainerSizeStyle,
 } from "./gesture.style";
-
-const clamp = (value: number, min: number, max: number) => {
-  "worklet";
-  return Math.min(Math.max(value, min), max);
-};
+import { clamp, mapToAngle } from "./gesture.util";
 
 const GestureContainerComponent = (props: GestureContainerProps) => {
+  const maxAngle = props.maxAngle ?? DEFAULT_MAX_ANGLE;
   const gestureRotateX = useSharedValue(ZERO);
   const gestureRotateY = useSharedValue(ZERO);
 
@@ -65,21 +63,6 @@ const GestureContainerComponent = (props: GestureContainerProps) => {
       sensorTranslateX,
       sensorTranslateY,
     ],
-  );
-
-  const interpolateRotation = useCallback(
-    (value: number, size: number, isReverse = false) => {
-      "worklet";
-      return interpolate(
-        value,
-        [ZERO, size],
-        isReverse
-          ? [props.maxAngle ?? 10, -(props.maxAngle ?? 10)]
-          : [-(props.maxAngle ?? 10), props.maxAngle ?? 10],
-        Extrapolation.CLAMP,
-      );
-    },
-    [props.maxAngle],
   );
 
   const resetMotion = useCallback(() => {
@@ -174,33 +157,28 @@ const GestureContainerComponent = (props: GestureContainerProps) => {
       Gesture.Pan()
         .onBegin((event) => {
           gestureRotateX.value = withTiming(
-            interpolateRotation(event.y, props.height, true),
+            mapToAngle(event.y, props.height, maxAngle, true),
             TIMING_CONFIG,
           );
           gestureRotateY.value = withTiming(
-            interpolateRotation(event.x, props.width),
+            mapToAngle(event.x, props.width, maxAngle),
             TIMING_CONFIG,
           );
         })
         .onUpdate((event) => {
-          gestureRotateX.value = interpolateRotation(
+          gestureRotateX.value = mapToAngle(
             event.y,
             props.height,
+            maxAngle,
             true,
           );
-          gestureRotateY.value = interpolateRotation(event.x, props.width);
+          gestureRotateY.value = mapToAngle(event.x, props.width, maxAngle);
         })
         .onFinalize(() => {
           gestureRotateX.value = withTiming(ZERO, TIMING_CONFIG);
           gestureRotateY.value = withTiming(ZERO, TIMING_CONFIG);
         }),
-    [
-      gestureRotateX,
-      gestureRotateY,
-      props.height,
-      props.width,
-      interpolateRotation,
-    ],
+    [gestureRotateX, gestureRotateY, props.height, props.width],
   );
 
   const sizeStyle = useGestureContainerSizeStyle({
