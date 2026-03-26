@@ -1,19 +1,10 @@
-import { memo, RefObject } from "react";
-import { DerivedValue, useDerivedValue } from "react-native-reanimated";
+import { memo } from "react";
+import { useDerivedValue } from "react-native-reanimated";
 import { Color, LinearGradient, RoundedRect } from "@shopify/react-native-skia";
-import { GradientPoints } from "../type/type";
-import { HoloColorPalette } from "../data/data.colors";
-import { DEFAULT_BORDER_RADIUS, ZERO } from "../const/const";
+import { DEFAULT_BORDER_RADIUS, ZERO } from "../../const/const";
+import ShineProps from "./shine.type";
 
-export type HoloShineProps = {
-  width: number;
-  height: number;
-  borderRadius?: number;
-  gradientPoints: DerivedValue<GradientPoints>;
-  holoColors: RefObject<HoloColorPalette>;
-};
-
-function HoloShineComponent(props: HoloShineProps) {
+const ShineComponent = (props: ShineProps) => {
   const gradientStart = useDerivedValue(
     () => props.gradientPoints.value.start,
     [props.gradientPoints],
@@ -39,10 +30,10 @@ function HoloShineComponent(props: HoloShineProps) {
       />
     </RoundedRect>
   );
-}
+};
 
-export const HoloShine = memo(
-  HoloShineComponent,
+export const Shine = memo(
+  ShineComponent,
   (prev, next) =>
     prev.width === next.width &&
     prev.height === next.height &&
@@ -51,4 +42,4 @@ export const HoloShine = memo(
     prev.holoColors === next.holoColors,
 );
 
-export default HoloShine;
+export default Shine;

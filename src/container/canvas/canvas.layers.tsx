@@ -3,12 +3,13 @@ import { SharedValue, DerivedValue } from "react-native-reanimated";
 import { SkImage } from "@shopify/react-native-skia";
 import { Backgrdound } from "../backgrund/background";
 import ImageMaskReverse from "../imagemaskreverse/imagemaskreverse";
-import HologramLayer from "../../component/hologramLayer";
-import GlossLayer from "../../component/glossLayer";
-import CardImageLayers from "../../component/cardImageLayers/cardImageLayers";
+import HologramLayer from "../../component/hologram/hologram";
+import Gloss from "../../component/gloss/gloss";
+
 import { GradientPoints } from "../../type/type";
 import { PerformanceOverlay } from "../monitor/monitor";
 import { HoloColorPalette } from "../../data/data.colors";
+import CardImageLayers from "../../component/layers/layers";
 
 type ShaderLayerProps = {
   visible: boolean;
@@ -121,7 +122,7 @@ export const GlossRenderLayer = memo((props: GlossRenderLayerProps) => {
   }
 
   return (
-    <GlossLayer
+    <Gloss
       width={props.width}
       height={props.height}
       borderRadius={props.borderRadius}

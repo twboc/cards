@@ -1,27 +1,11 @@
 import { memo } from "react";
-import { DerivedValue, useDerivedValue } from "react-native-reanimated";
-import { Color, LinearGradient, RoundedRect } from "@shopify/react-native-skia";
-import { GradientPoints } from "../type/type";
-import { DEFAULT_BORDER_RADIUS, ZERO } from "../const/const";
+import { useDerivedValue } from "react-native-reanimated";
+import { LinearGradient, RoundedRect } from "@shopify/react-native-skia";
+import { DEFAULT_BORDER_RADIUS, ZERO } from "../../const/const";
+import GlossProps from "./gloss.type";
+import { GLOSS_COLORS, GLOSS_POSITIONS } from "./gloss.conts";
 
-export type GlossLayerProps = {
-  width: number;
-  height: number;
-  borderRadius?: number;
-  gradientPoints: DerivedValue<GradientPoints>;
-};
-
-const GLOSS_COLORS = [
-  "rgba(0, 0, 0, 0)",
-  "rgba(255, 255, 255, 0.3)",
-  "rgba(0, 0, 0, 0)",
-  "rgba(255, 255, 255, 0.2)",
-  "rgba(0, 0, 0, 0)",
-] as Color[];
-
-const GLOSS_POSITIONS = [0, 0.35, 0.5, 0.65, 1] as number[];
-
-function GlossLayerComponent(props: GlossLayerProps) {
+const GlossComponent = (props: GlossProps) => {
   const gradientStart = useDerivedValue(
     () => props.gradientPoints.value.start,
     [props.gradientPoints],
@@ -48,10 +32,10 @@ function GlossLayerComponent(props: GlossLayerProps) {
       />
     </RoundedRect>
   );
-}
+};
 
-export const GlossLayer = memo(
-  GlossLayerComponent,
+export const Gloss = memo(
+  GlossComponent,
   (prev, next) =>
     prev.width === next.width &&
     prev.height === next.height &&
@@ -59,4 +43,4 @@ export const GlossLayer = memo(
     prev.gradientPoints === next.gradientPoints,
 );
 
-export default GlossLayer;
+export default Gloss;

@@ -1,18 +1,20 @@
 import { memo, useCallback, useMemo } from "react";
 import { Image, Rect } from "@shopify/react-native-skia";
-import HoloShine from "../holoShine";
+
 import { Outline } from "../../container/outline/outline";
 import ImageMask from "../../container/imagemask/imagemask";
+import Shine from "../shine/shine";
 import RGBSplit from "../../container/rgbsplit/rgbsplit";
+
 import {
   DEFAULT_BORDER_RADIUS,
   FILL_COLOR,
   IMAGE_FIT,
   MASK_MODE_OVERRIDE,
 } from "../../const/const";
-import CardImageLayersProps from "./cardImageLayers.type";
+import LayersProps from "./layers.type";
 
-function CardImageLayersComponent(props: CardImageLayersProps) {
+function LayersComponent(props: LayersProps) {
   const hasImage = props.image != null;
   const hasBackground = props.background != null;
   const hasGradientPoints = props.gradientPoints != null;
@@ -110,7 +112,7 @@ function CardImageLayersComponent(props: CardImageLayersProps) {
     }
 
     return (
-      <HoloShine
+      <Shine
         width={props.width}
         height={props.height}
         borderRadius={DEFAULT_BORDER_RADIUS}
@@ -207,8 +209,8 @@ function CardImageLayersComponent(props: CardImageLayersProps) {
   );
 }
 
-export const CardImageLayers = memo(
-  CardImageLayersComponent,
+export const Layers = memo(
+  LayersComponent,
   (prev, next) =>
     prev.width === next.width &&
     prev.height === next.height &&
@@ -226,4 +228,4 @@ export const CardImageLayers = memo(
     prev.gradientPoints === next.gradientPoints,
 );
 
-export default CardImageLayers;
+export default Layers;

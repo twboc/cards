@@ -4,7 +4,7 @@ import { SkImage } from "@shopify/react-native-skia";
 import { GradientPoints } from "../../type/type";
 import { HoloColorPalette } from "../../data/data.colors";
 
-interface CardImageLayersProps {
+interface LayersProps {
   width: number;
   height: number;
   background: SkImage | null;
@@ -23,4 +23,4 @@ interface CardImageLayersProps {
   gradientPoints?: DerivedValue<GradientPoints>;
 }
 
-export default CardImageLayersProps;
+export default LayersProps;

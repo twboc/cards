@@ -1,44 +1,24 @@
-import { memo, RefObject } from "react";
-import { DerivedValue, useDerivedValue } from "react-native-reanimated";
+import { memo } from "react";
+import { useDerivedValue } from "react-native-reanimated";
 import {
-  Color,
   Group,
   Image,
   LinearGradient,
   Mask,
   RoundedRect,
-  SkImage,
-  Transforms3d,
 } from "@shopify/react-native-skia";
-import HoloShine from "./holoShine";
-import { GradientPoints } from "../type/type";
-import { HoloColorPalette } from "../data/data.colors";
-import { DEFAULT_BORDER_RADIUS, ZERO } from "../const/const";
+import Shine from "../shine/shine";
+import { DEFAULT_BORDER_RADIUS, ZERO } from "../../const/const";
+import HologramProps from "./hologram.type";
+import {
+  HOLO_BLEND_MODE,
+  HOLO_IMAGE_FIT,
+  HOLO_MASK_COLORS,
+  HOLO_MASK_MODE,
+  HOLO_MASK_POSITIONS,
+} from "./hologram.const";
 
-export type HologramLayerProps = {
-  width: number;
-  height: number;
-  borderRadius?: number;
-  hologramMask: SkImage | null;
-  holoColors: RefObject<HoloColorPalette>;
-  maskTransform: DerivedValue<Transforms3d>;
-  gradientPoints: DerivedValue<GradientPoints>;
-};
-
-const MASK_COLORS = [
-  "rgba(0, 0, 0, 0)",
-  "rgba(255, 255, 255, 0.8)",
-  "rgba(0, 0, 0, 0)",
-  "rgba(255, 255, 255, 0.7)",
-  "rgba(0, 0, 0, 0)",
-] as Color[];
-
-const MASK_POSITIONS = [0, 0.35, 0.5, 0.65, 1] as number[];
-const IMAGE_FIT = "cover" as const;
-const BLEND_MODE = "overlay" as const;
-const MASK_MODE = "luminance" as const;
-
-function HologramLayerComponent(props: HologramLayerProps) {
+const HologramComponent = (props: HologramProps) => {
   const gradientStart = useDerivedValue(
     () => props.gradientPoints.value.start,
     [props.gradientPoints],
@@ -56,9 +36,9 @@ function HologramLayerComponent(props: HologramLayerProps) {
   const maskRadius = props.borderRadius ?? DEFAULT_BORDER_RADIUS;
 
   return (
-    <Group blendMode={BLEND_MODE}>
+    <Group blendMode={HOLO_BLEND_MODE}>
       <Mask
-        mode={MASK_MODE}
+        mode={HOLO_MASK_MODE}
         mask={
           <RoundedRect
             x={ZERO}
@@ -70,8 +50,8 @@ function HologramLayerComponent(props: HologramLayerProps) {
             <LinearGradient
               start={gradientStart}
               end={gradientEnd}
-              colors={MASK_COLORS}
-              positions={MASK_POSITIONS}
+              colors={HOLO_MASK_COLORS}
+              positions={HOLO_MASK_POSITIONS}
             />
           </RoundedRect>
         }
@@ -81,11 +61,11 @@ function HologramLayerComponent(props: HologramLayerProps) {
             image={props.hologramMask}
             width={props.width}
             height={props.height}
-            fit={IMAGE_FIT}
+            fit={HOLO_IMAGE_FIT}
           />
         </Group>
 
-        <HoloShine
+        <Shine
           width={props.width}
           height={props.height}
           borderRadius={props.borderRadius ?? DEFAULT_BORDER_RADIUS}
@@ -95,10 +75,10 @@ function HologramLayerComponent(props: HologramLayerProps) {
       </Mask>
     </Group>
   );
-}
+};
 
-export const HologramLayer = memo(
-  HologramLayerComponent,
+export const Hologram = memo(
+  HologramComponent,
   (prev, next) =>
     prev.width === next.width &&
     prev.height === next.height &&
@@ -109,4 +89,4 @@ export const HologramLayer = memo(
     prev.gradientPoints === next.gradientPoints,
 );
 
-export default HologramLayer;
+export default Hologram;
