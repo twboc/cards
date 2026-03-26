@@ -8,6 +8,10 @@ export const FILL_COLOR = "#FFF";
 export const MASK_MODE = "alpha" as const;
 export const MASK_COLOR = "white";
 
+export const DEFAULT_MODE = "alpha" as const;
+export const MASK_FIT = "contain" as const;
+export const IMAGE_FIT = "fill" as const;
+
 export const zeroShared = {
   value: 0,
 } as SharedValue<number>;

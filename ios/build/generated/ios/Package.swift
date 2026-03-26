@@ -16,7 +16,7 @@ let package = Package(
             targets: ["ReactAppDependencyProvider"]),
     ],
     dependencies: [
-      .package(name: "React", path: "../../../../../../../../node_modules/react-native")
+      .package(name: "React", path: "../../../../../../../../../node_modules/react-native")
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.

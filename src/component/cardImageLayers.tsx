@@ -3,7 +3,7 @@ import { DerivedValue, SharedValue } from "react-native-reanimated";
 import { Image, SkImage } from "@shopify/react-native-skia";
 import HoloShine from "../component/holoShine";
 import { Outline } from "../container/outline";
-import ImageMask from "../container/imagemask";
+import ImageMask from "../container/imagemask/imagemask";
 import { GradientPoints } from "../type/type";
 import RGBSplit from "../container/rgbsplit/rgbsplit";
 import { HoloColorPalette } from "../data/data.colors";
