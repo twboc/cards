@@ -5,8 +5,9 @@ import backgroundSource from "../../assets/background/background.png";
 import HoloColver02 from "../../assets/effect/holo_cover_02.gif";
 import { useCardMemoValues } from "./card.hooks";
 import { CardCanvasContent } from "./card.canvasContent";
-import { GestureContainer, GestureContainerMotion } from "../gesture/gesture";
+import { GestureContainer } from "../gesture/gesture";
 import { CardProps } from "./card.type";
+import { GestureContainerMotion } from "../gesture/gesture.type";
 
 const CardComponent: FC<CardProps> = (props) => {
   const background = useImage(backgroundSource);

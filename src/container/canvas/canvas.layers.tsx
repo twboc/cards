@@ -5,7 +5,7 @@ import { Backgrdound } from "../backgrund/background";
 import ImageMaskReverse from "../imagemaskreverse/imagemaskreverse";
 import HologramLayer from "../../component/hologramLayer";
 import GlossLayer from "../../component/glossLayer";
-import CardImageLayers from "../../component/cardImageLayers";
+import CardImageLayers from "../../component/cardImageLayers/cardImageLayers";
 import { GradientPoints } from "../../type/type";
 import { PerformanceOverlay } from "../monitor/monitor";
 import { HoloColorPalette } from "../../data/data.colors";

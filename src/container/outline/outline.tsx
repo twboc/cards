@@ -4,6 +4,7 @@ import {
   Image,
   Mask,
   Morphology,
+  Paint,
   Rect,
 } from "@shopify/react-native-skia";
 import {
@@ -56,7 +57,7 @@ const OutlineComponent: FC<OutlinProps> = (props) => {
         />
       </Mask>
 
-      <Group blendMode={DST_OUT_BLEND}>{punchOutImage}</Group>
+      <Group layer={<Paint blendMode={DST_OUT_BLEND} />}>{punchOutImage}</Group>
     </>
   );
 };
