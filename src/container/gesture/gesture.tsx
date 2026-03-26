@@ -23,6 +23,10 @@ import {
 } from "../../const/const";
 import { scheduleOnUI } from "react-native-worklets";
 import GestureContainerProps, { GestureContainerMotion } from "./gesture.type";
+import {
+  useGestureContainerAnimatedStyles,
+  useGestureContainerSizeStyle,
+} from "./gesture.style";
 
 const clamp = (value: number, min: number, max: number) => {
   "worklet";
@@ -202,33 +206,18 @@ const GestureContainerComponent = (props: GestureContainerProps) => {
     ],
   );
 
-  const sizeStyle = useMemo(
-    () => ({
-      width: props.width,
-      height: props.height,
-    }),
-    [props.width, props.height],
-  );
-
-  const outerStyle = useAnimatedStyle(() => {
-    const totalRotateX = gestureRotateX.value + sensorRotateX.value;
-    const totalRotateY = gestureRotateY.value + sensorRotateY.value;
-    return {
-      transform: [
-        { perspective: PERSPECTIVE },
-        { rotateX: `${totalRotateX}deg` },
-        { rotateY: `${totalRotateY}deg` },
-      ],
-    };
+  const sizeStyle = useGestureContainerSizeStyle({
+    width: props.width,
+    height: props.height,
   });
 
-  const innerStyle = useAnimatedStyle(() => {
-    return {
-      transform: [
-        { translateX: sensorTranslateX.value },
-        { translateY: sensorTranslateY.value },
-      ],
-    };
+  const { outerStyle, innerStyle } = useGestureContainerAnimatedStyles({
+    gestureRotateX,
+    gestureRotateY,
+    sensorRotateX,
+    sensorRotateY,
+    sensorTranslateX,
+    sensorTranslateY,
   });
 
   const renderedChildren = useMemo(
