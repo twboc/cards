@@ -7,7 +7,7 @@ import HologramLayer from "../../component/hologramLayer";
 import GlossLayer from "../../component/glossLayer";
 import CardImageLayers from "../../component/cardImageLayers";
 import { GradientPoints } from "../../type/type";
-import { PerformanceOverlay } from "../monitor";
+import { PerformanceOverlay } from "../monitor/monitor";
 import { HoloColorPalette } from "../../data/data.colors";
 
 type ShaderLayerProps = {

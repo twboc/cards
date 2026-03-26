@@ -5,7 +5,7 @@ import {
   MonitoredCanvas,
   MonitoredComponentProfiler,
   useJsFpsMonitor,
-} from "../monitor";
+} from "../monitor/monitor";
 import {
   DEFAULT_BORDER_RADIUS,
   DEFAULT_MAX_ANGLE,

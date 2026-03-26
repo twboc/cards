@@ -4,7 +4,7 @@ import {
   CLIP,
   DEFAULT_MODE,
   DST_OUT_BLEND,
-  IMAGE_FIT,
+  MASK_IMAGE_FIT,
   MASK_COLOR,
   MASK_FIT,
   ZERO,
@@ -51,7 +51,7 @@ const ImageMaskReverseComponent: FC<ImageMaskReverseProps> = (props) => {
         y={ZERO}
         width={props.width}
         height={props.height}
-        fit={IMAGE_FIT}
+        fit={MASK_IMAGE_FIT}
       />
     ),
     [props.image, props.width, props.height],

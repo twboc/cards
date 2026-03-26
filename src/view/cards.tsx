@@ -49,7 +49,7 @@ const Cards = () => {
   const [showOutlineHolo, setShowOutlineHolo] = useState(true);
   const [showRGBSplit, setShowRGBSplit] = useState(false);
   const [showHoloMask, setShowHoloMask] = useState(false);
-  const [showHoloBackground, setShowHoloBackground] = useState(true);
+  const [showHoloBackground, setShowHoloBackground] = useState(false);
 
   const [selectedHoloColors, setSelectedHoloColors] = useState(
     HOLO_COLOR_OPTIONS[0].value,

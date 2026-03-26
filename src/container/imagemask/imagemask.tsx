@@ -4,7 +4,7 @@ import { SharedValue } from "react-native-reanimated";
 import {
   CLIP,
   DEFAULT_MODE,
-  IMAGE_FIT,
+  MASK_IMAGE_FIT,
   MASK_FIT,
   ZERO,
 } from "../../const/const";
@@ -40,7 +40,7 @@ const ImageMaskComponent: FC<ImageMaskProps> = (props) => {
           y={ZERO}
           width={props.width}
           height={props.height}
-          fit={IMAGE_FIT}
+          fit={MASK_IMAGE_FIT}
         />
       </Mask>
     );
@@ -85,7 +85,7 @@ const ImageMaskComponent: FC<ImageMaskProps> = (props) => {
         y={ZERO}
         width={props.width}
         height={props.height}
-        fit={IMAGE_FIT}
+        fit={MASK_IMAGE_FIT}
       />
     );
   }, [props.image, props.width, props.height]);

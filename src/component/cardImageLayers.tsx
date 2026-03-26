@@ -2,12 +2,16 @@ import { memo, RefObject } from "react";
 import { DerivedValue, SharedValue } from "react-native-reanimated";
 import { Image, SkImage } from "@shopify/react-native-skia";
 import HoloShine from "../component/holoShine";
-import { Outline } from "../container/outline";
+import { Outline } from "../container/outline/outline";
 import ImageMask from "../container/imagemask/imagemask";
 import { GradientPoints } from "../type/type";
 import RGBSplit from "../container/rgbsplit/rgbsplit";
 import { HoloColorPalette } from "../data/data.colors";
-import { DEFAULT_BORDER_RADIUS } from "../const/const";
+import {
+  DEFAULT_BORDER_RADIUS,
+  IMAGE_FIT,
+  MASK_MODE_OVERRIDE,
+} from "../const/const";
 
 export type CardImageLayersProps = {
   width: number;
@@ -27,9 +31,6 @@ export type CardImageLayersProps = {
 
   gradientPoints?: DerivedValue<GradientPoints>;
 };
-
-const IMAGE_FIT = "cover" as const;
-const MASK_MODE = "luminance" as const;
 
 function CardImageLayersComponent(props: CardImageLayersProps) {
   if (!props.image) {
@@ -67,7 +68,7 @@ function CardImageLayersComponent(props: CardImageLayersProps) {
           }
           width={props.width}
           height={props.height}
-          mode={MASK_MODE}
+          mode={MASK_MODE_OVERRIDE}
         />
       )}
 
@@ -91,7 +92,7 @@ function CardImageLayersComponent(props: CardImageLayersProps) {
           }
           width={props.width}
           height={props.height}
-          mode={MASK_MODE}
+          mode={MASK_MODE_OVERRIDE}
         />
       )}
 
@@ -113,7 +114,7 @@ function CardImageLayersComponent(props: CardImageLayersProps) {
           mask={props.image}
           width={props.width}
           height={props.height}
-          mode={MASK_MODE}
+          mode={MASK_MODE_OVERRIDE}
         />
       )}
     </>

@@ -5,14 +5,24 @@ export const MODAL_HEIGHT = "50%";
 export const MODAL_BOTTOM_PADDING = 60;
 export const FILL_COLOR = "#FFF";
 
+export const MASK_MODE_OVERRIDE = "luminance" as const;
+
+// image
+export const IMAGE_FIT = "cover" as const;
+
 // mask
 export const MASK_MODE = "alpha" as const;
 export const MASK_COLOR = "#FFF";
 export const DEFAULT_MODE = "alpha" as const;
 export const MASK_FIT = "contain" as const;
-export const IMAGE_FIT = "fill" as const;
+export const MASK_IMAGE_FIT = "fill" as const;
 export const DST_OUT_BLEND = "dstOut" as const;
 export const CLIP = false;
+
+// outline
+export const DEFAULT_OUTLINE_SIZE = 4;
+export const DEFAULT_OUTLINE_COLOR = "#ffffff";
+export const DEFAULT_FIT = "contain" as const;
 
 export const ZERO_SHARED = {
   value: 0,
