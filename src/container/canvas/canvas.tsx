@@ -9,7 +9,7 @@ import {
 import {
   DEFAULT_BORDER_RADIUS,
   DEFAULT_MAX_ANGLE,
-  zeroShared,
+  ZERO_SHARED,
 } from "../../const/const";
 import FullCanvasProps from "./canvas.type";
 import { NoopOverlay, NoopWrapper } from "./canvas.noop";
@@ -52,12 +52,12 @@ const FullCanvasComponent: FC<FullCanvasProps> = (props) => {
     props.showHologram && !!props.hologramMaskSource && !!props.hologramMask;
   const showHoloBackgroundLayer = props.showHoloBackground && !!props.image;
 
-  const gestureRotateX = props.motion?.gestureRotateX ?? zeroShared;
-  const gestureRotateY = props.motion?.gestureRotateY ?? zeroShared;
-  const sensorRotateX = props.motion?.sensorRotateX ?? zeroShared;
-  const sensorRotateY = props.motion?.sensorRotateY ?? zeroShared;
-  const sensorTranslateX = props.motion?.sensorTranslateX ?? zeroShared;
-  const sensorTranslateY = props.motion?.sensorTranslateY ?? zeroShared;
+  const gestureRotateX = props.motion?.gestureRotateX ?? ZERO_SHARED;
+  const gestureRotateY = props.motion?.gestureRotateY ?? ZERO_SHARED;
+  const sensorRotateX = props.motion?.sensorRotateX ?? ZERO_SHARED;
+  const sensorRotateY = props.motion?.sensorRotateY ?? ZERO_SHARED;
+  const sensorTranslateX = props.motion?.sensorTranslateX ?? ZERO_SHARED;
+  const sensorTranslateY = props.motion?.sensorTranslateY ?? ZERO_SHARED;
 
   const clock = useClock();
 

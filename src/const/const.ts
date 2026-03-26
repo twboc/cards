@@ -5,14 +5,16 @@ export const MODAL_HEIGHT = "50%";
 export const MODAL_BOTTOM_PADDING = 60;
 export const FILL_COLOR = "#FFF";
 
+// mask
 export const MASK_MODE = "alpha" as const;
-export const MASK_COLOR = "white";
-
+export const MASK_COLOR = "#FFF";
 export const DEFAULT_MODE = "alpha" as const;
 export const MASK_FIT = "contain" as const;
 export const IMAGE_FIT = "fill" as const;
+export const DST_OUT_BLEND = "dstOut" as const;
+export const CLIP = false;
 
-export const zeroShared = {
+export const ZERO_SHARED = {
   value: 0,
 } as SharedValue<number>;
 

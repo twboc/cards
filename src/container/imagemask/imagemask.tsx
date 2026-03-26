@@ -1,10 +1,15 @@
 import React, { FC, memo, useMemo } from "react";
 import { AnimatedProp, Image, Mask, SkImage } from "@shopify/react-native-skia";
 import { SharedValue } from "react-native-reanimated";
-import { DEFAULT_MODE, IMAGE_FIT, MASK_FIT, ZERO } from "../../const/const";
+import {
+  CLIP,
+  DEFAULT_MODE,
+  IMAGE_FIT,
+  MASK_FIT,
+  ZERO,
+} from "../../const/const";
 import ImageMaskProps from "./imagemask.type";
 import { isRawImageSource, isRenderableElement } from "./imagemask.util";
-import { CLIP } from "./imagemask.const";
 
 const ImageMaskComponent: FC<ImageMaskProps> = (props) => {
   const mode = props.mode ?? DEFAULT_MODE;
