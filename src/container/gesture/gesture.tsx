@@ -1,11 +1,9 @@
 import React, { memo, useCallback, useEffect, useMemo, useRef } from "react";
-import { StyleSheet, ViewStyle } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
   Extrapolation,
   interpolate,
   useAnimatedReaction,
-  useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
@@ -15,7 +13,6 @@ import {
   SensorTypes,
 } from "react-native-sensors";
 import {
-  PERSPECTIVE,
   ROTATION_EPSILON,
   SENSOR_INTERVAL_MS,
   TIMING_CONFIG,
@@ -23,7 +20,7 @@ import {
 } from "../../const/const";
 import { scheduleOnUI } from "react-native-worklets";
 import GestureContainerProps, { GestureContainerMotion } from "./gesture.type";
-import {
+import style, {
   useGestureContainerAnimatedStyles,
   useGestureContainerSizeStyle,
 } from "./gesture.style";
@@ -230,8 +227,8 @@ const GestureContainerComponent = (props: GestureContainerProps) => {
 
   return (
     <GestureDetector gesture={gesture}>
-      <Animated.View style={[styles.outer, sizeStyle, outerStyle]}>
-        <Animated.View style={[styles.inner, innerStyle]}>
+      <Animated.View style={[style.outer, sizeStyle, outerStyle]}>
+        <Animated.View style={[style.inner, innerStyle]}>
           {renderedChildren}
         </Animated.View>
       </Animated.View>
@@ -253,20 +250,3 @@ export const GestureContainer = memo(
 );
 
 export default GestureContainer;
-
-const styles = StyleSheet.create({
-  outer: {
-    overflow: "visible",
-  } as ViewStyle,
-  inner: {
-    width: "100%",
-    height: "100%",
-  } as ViewStyle,
-  identityTransform: {
-    transform: [
-      { perspective: PERSPECTIVE },
-      { rotateX: "0deg" },
-      { rotateY: "0deg" },
-    ],
-  } as ViewStyle,
-});

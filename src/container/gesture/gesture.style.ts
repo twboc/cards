@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { useAnimatedStyle, SharedValue } from "react-native-reanimated";
 import { PERSPECTIVE } from "../../const/const";
+import { StyleSheet, ViewStyle } from "react-native";
 
 export const useGestureContainerSizeStyle = (params: {
   width: number;
@@ -52,3 +53,22 @@ export const useGestureContainerAnimatedStyles = (params: {
     innerStyle,
   };
 };
+
+const style = StyleSheet.create({
+  outer: {
+    overflow: "visible",
+  } as ViewStyle,
+  inner: {
+    width: "100%",
+    height: "100%",
+  } as ViewStyle,
+  identityTransform: {
+    transform: [
+      { perspective: PERSPECTIVE },
+      { rotateX: "0deg" },
+      { rotateY: "0deg" },
+    ],
+  } as ViewStyle,
+});
+
+export default style;
