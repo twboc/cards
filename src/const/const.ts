@@ -29,3 +29,4 @@ export const RESET_TIMING_CONFIG = { duration: 100 };
 export const PERSPECTIVE = 700;
 export const ZERO = 0;
 export const ROTATION_EPSILON = 0.01;
+export const TIMING_CONFIG = { duration: 100 };

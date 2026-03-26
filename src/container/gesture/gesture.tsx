@@ -1,9 +1,8 @@
-import React, { memo, useCallback, useEffect, useMemo } from "react";
-import { StyleSheet, View, ViewStyle } from "react-native";
+import React, { memo, useCallback, useEffect, useMemo, useRef } from "react";
+import { StyleSheet, ViewStyle } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
   Extrapolation,
-  SharedValue,
   interpolate,
   useAnimatedReaction,
   useAnimatedStyle,
@@ -15,54 +14,38 @@ import {
   setUpdateIntervalForType,
   SensorTypes,
 } from "react-native-sensors";
-
-export interface GestureContainerMotion {
-  gestureRotateX: SharedValue<number>;
-  gestureRotateY: SharedValue<number>;
-  sensorRotateX: SharedValue<number>;
-  sensorRotateY: SharedValue<number>;
-  sensorTranslateX: SharedValue<number>;
-  sensorTranslateY: SharedValue<number>;
-}
-
-interface GestureContainerProps {
-  children:
-    | React.ReactNode
-    | ((motion: GestureContainerMotion) => React.ReactNode);
-  width: number;
-  height: number;
-  maxAngle?: number;
-  onRotationChange?: (rx: number, ry: number) => void;
-  sensorEnabled?: boolean;
-  sensorRotationFactor?: number;
-  sensorTranslationFactor?: number;
-}
+import {
+  PERSPECTIVE,
+  ROTATION_EPSILON,
+  SENSOR_INTERVAL_MS,
+  TIMING_CONFIG,
+  ZERO,
+} from "../../const/const";
+import { scheduleOnUI } from "react-native-worklets";
+import GestureContainerProps, { GestureContainerMotion } from "./gesture.type";
 
 const clamp = (value: number, min: number, max: number) => {
   "worklet";
   return Math.min(Math.max(value, min), max);
 };
 
-const timingConfig = { duration: 100 };
+const GestureContainerComponent = (props: GestureContainerProps) => {
+  const gestureRotateX = useSharedValue(ZERO);
+  const gestureRotateY = useSharedValue(ZERO);
 
-const GestureContainerComponent = ({
-  children,
-  width,
-  height,
-  maxAngle = 10,
-  onRotationChange,
-  sensorEnabled = true,
-  sensorRotationFactor = 12,
-  sensorTranslationFactor = 28,
-}: GestureContainerProps) => {
-  const gestureRotateX = useSharedValue(0);
-  const gestureRotateY = useSharedValue(0);
+  const sensorRotateX = useSharedValue(ZERO);
+  const sensorRotateY = useSharedValue(ZERO);
 
-  const sensorRotateX = useSharedValue(0);
-  const sensorRotateY = useSharedValue(0);
+  const sensorTranslateX = useSharedValue(ZERO);
+  const sensorTranslateY = useSharedValue(ZERO);
 
-  const sensorTranslateX = useSharedValue(0);
-  const sensorTranslateY = useSharedValue(0);
+  const onRotationChangeRef = useRef<GestureContainerProps["onRotationChange"]>(
+    props.onRotationChange,
+  );
+
+  useEffect(() => {
+    onRotationChangeRef.current = props.onRotationChange;
+  }, [props.onRotationChange]);
 
   const motion = useMemo<GestureContainerMotion>(
     () => ({
@@ -88,21 +71,23 @@ const GestureContainerComponent = ({
       "worklet";
       return interpolate(
         value,
-        [0, size],
-        isReverse ? [maxAngle, -maxAngle] : [-maxAngle, maxAngle],
+        [ZERO, size],
+        isReverse
+          ? [props.maxAngle ?? 10, -(props.maxAngle ?? 10)]
+          : [-(props.maxAngle ?? 10), props.maxAngle ?? 10],
         Extrapolation.CLAMP,
       );
     },
-    [maxAngle],
+    [props.maxAngle],
   );
 
   const resetMotion = useCallback(() => {
-    gestureRotateX.value = withTiming(0, timingConfig);
-    gestureRotateY.value = withTiming(0, timingConfig);
-    sensorRotateX.value = withTiming(0, timingConfig);
-    sensorRotateY.value = withTiming(0, timingConfig);
-    sensorTranslateX.value = withTiming(0, timingConfig);
-    sensorTranslateY.value = withTiming(0, timingConfig);
+    gestureRotateX.value = withTiming(ZERO, TIMING_CONFIG);
+    gestureRotateY.value = withTiming(ZERO, TIMING_CONFIG);
+    sensorRotateX.value = withTiming(ZERO, TIMING_CONFIG);
+    sensorRotateY.value = withTiming(ZERO, TIMING_CONFIG);
+    sensorTranslateX.value = withTiming(ZERO, TIMING_CONFIG);
+    sensorTranslateY.value = withTiming(ZERO, TIMING_CONFIG);
   }, [
     gestureRotateX,
     gestureRotateY,
@@ -113,14 +98,18 @@ const GestureContainerComponent = ({
   ]);
 
   useEffect(() => {
-    if (!sensorEnabled) {
+    if (!props.sensorEnabled) {
       resetMotion();
       return;
     }
 
-    setUpdateIntervalForType(SensorTypes.accelerometer, 40);
+    setUpdateIntervalForType(SensorTypes.accelerometer, SENSOR_INTERVAL_MS);
 
     const subscription = accelerometer.subscribe(({ x, y }) => {
+      const maxAngle = props.maxAngle ?? 10;
+      const sensorRotationFactor = props.sensorRotationFactor ?? 12;
+      const sensorTranslationFactor = props.sensorTranslationFactor ?? 28;
+
       const nextRotateY = clamp(x * sensorRotationFactor, -maxAngle, maxAngle);
       const nextRotateX = clamp(-y * sensorRotationFactor, -maxAngle, maxAngle);
 
@@ -136,10 +125,10 @@ const GestureContainerComponent = ({
         sensorTranslationFactor,
       );
 
-      sensorRotateX.value = withTiming(nextRotateX, timingConfig);
-      sensorRotateY.value = withTiming(nextRotateY, timingConfig);
-      sensorTranslateX.value = withTiming(nextTranslateX, timingConfig);
-      sensorTranslateY.value = withTiming(nextTranslateY, timingConfig);
+      sensorRotateX.value = withTiming(nextRotateX, TIMING_CONFIG);
+      sensorRotateY.value = withTiming(nextRotateY, TIMING_CONFIG);
+      sensorTranslateX.value = withTiming(nextTranslateX, TIMING_CONFIG);
+      sensorTranslateY.value = withTiming(nextTranslateY, TIMING_CONFIG);
     });
 
     return () => {
@@ -147,56 +136,86 @@ const GestureContainerComponent = ({
       resetMotion();
     };
   }, [
-    maxAngle,
+    props.maxAngle,
+    props.sensorEnabled,
+    props.sensorRotationFactor,
+    props.sensorTranslationFactor,
     resetMotion,
-    sensorEnabled,
-    sensorRotationFactor,
-    sensorTranslationFactor,
     sensorRotateX,
     sensorRotateY,
     sensorTranslateX,
     sensorTranslateY,
   ]);
 
+  const notifyRotationChange = useCallback((rx: number, ry: number) => {
+    onRotationChangeRef.current?.(rx, ry);
+  }, []);
+
   useAnimatedReaction(
-    () => ({ x: gestureRotateX.value, y: gestureRotateY.value }),
+    () => ({
+      x: gestureRotateX.value,
+      y: gestureRotateY.value,
+    }),
     (current, previous) => {
-      if (current !== previous && onRotationChange) {
-        onRotationChange(current.x, current.y);
+      const changed =
+        !previous ||
+        Math.abs(current.x - previous.x) > ROTATION_EPSILON ||
+        Math.abs(current.y - previous.y) > ROTATION_EPSILON;
+
+      if (changed && onRotationChangeRef.current) {
+        scheduleOnUI(notifyRotationChange, current.x, current.y);
       }
     },
   );
+
   const gesture = useMemo(
     () =>
       Gesture.Pan()
         .onBegin((event) => {
           gestureRotateX.value = withTiming(
-            interpolateRotation(event.y, height, true),
-            timingConfig,
+            interpolateRotation(event.y, props.height, true),
+            TIMING_CONFIG,
           );
           gestureRotateY.value = withTiming(
-            interpolateRotation(event.x, width),
-            timingConfig,
+            interpolateRotation(event.x, props.width),
+            TIMING_CONFIG,
           );
         })
         .onUpdate((event) => {
-          gestureRotateX.value = interpolateRotation(event.y, height, true);
-          gestureRotateY.value = interpolateRotation(event.x, width);
+          gestureRotateX.value = interpolateRotation(
+            event.y,
+            props.height,
+            true,
+          );
+          gestureRotateY.value = interpolateRotation(event.x, props.width);
         })
         .onFinalize(() => {
-          gestureRotateX.value = withTiming(0, timingConfig);
-          gestureRotateY.value = withTiming(0, timingConfig);
+          gestureRotateX.value = withTiming(ZERO, TIMING_CONFIG);
+          gestureRotateY.value = withTiming(ZERO, TIMING_CONFIG);
         }),
-    [gestureRotateX, gestureRotateY, height, width, interpolateRotation],
+    [
+      gestureRotateX,
+      gestureRotateY,
+      props.height,
+      props.width,
+      interpolateRotation,
+    ],
+  );
+
+  const sizeStyle = useMemo(
+    () => ({
+      width: props.width,
+      height: props.height,
+    }),
+    [props.width, props.height],
   );
 
   const outerStyle = useAnimatedStyle(() => {
     const totalRotateX = gestureRotateX.value + sensorRotateX.value;
     const totalRotateY = gestureRotateY.value + sensorRotateY.value;
-
     return {
       transform: [
-        { perspective: 700 },
+        { perspective: PERSPECTIVE },
         { rotateX: `${totalRotateX}deg` },
         { rotateY: `${totalRotateY}deg` },
       ],
@@ -213,20 +232,21 @@ const GestureContainerComponent = ({
   });
 
   const renderedChildren = useMemo(
-    () => (typeof children === "function" ? children(motion) : children),
-    [children, motion],
+    () =>
+      typeof props.children === "function"
+        ? props.children(motion)
+        : props.children,
+    [props.children, motion],
   );
 
   return (
-    <View>
-      <GestureDetector gesture={gesture}>
-        <Animated.View style={[styles.outer, { width, height }, outerStyle]}>
-          <Animated.View style={[styles.inner, innerStyle]}>
-            {renderedChildren}
-          </Animated.View>
+    <GestureDetector gesture={gesture}>
+      <Animated.View style={[styles.outer, sizeStyle, outerStyle]}>
+        <Animated.View style={[styles.inner, innerStyle]}>
+          {renderedChildren}
         </Animated.View>
-      </GestureDetector>
-    </View>
+      </Animated.View>
+    </GestureDetector>
   );
 };
 
@@ -243,6 +263,8 @@ export const GestureContainer = memo(
     prev.children === next.children,
 );
 
+export default GestureContainer;
+
 const styles = StyleSheet.create({
   outer: {
     overflow: "visible",
@@ -252,6 +274,10 @@ const styles = StyleSheet.create({
     height: "100%",
   } as ViewStyle,
   identityTransform: {
-    transform: [{ perspective: 700 }, { rotateX: "0deg" }, { rotateY: "0deg" }],
+    transform: [
+      { perspective: PERSPECTIVE },
+      { rotateX: "0deg" },
+      { rotateY: "0deg" },
+    ],
   } as ViewStyle,
 });
