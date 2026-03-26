@@ -22,3 +22,7 @@ export default interface GestureContainerProps {
   sensorRotationFactor?: number;
   sensorTranslationFactor?: number;
 }
+
+export type UseGestureContainerMotionParams = GestureContainerMotion & {
+  props: GestureContainerProps;
+};
