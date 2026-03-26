@@ -116,6 +116,7 @@ const FullCanvasComponent: FC<FullCanvasProps> = (props) => {
             time={time}
             shaderEffectRef={props.shaderEffectRef}
           />
+
           <HoloBackgroundLayer
             visible={showHoloBackgroundLayer}
             width={props.width}
@@ -123,6 +124,7 @@ const FullCanvasComponent: FC<FullCanvasProps> = (props) => {
             image={props.image}
             holoCover={props.holoCover}
           />
+
           <CardImageRenderLayer
             width={props.width}
             height={props.height}

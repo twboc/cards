@@ -1,7 +1,7 @@
 import React, { memo } from "react";
 import { SharedValue, DerivedValue } from "react-native-reanimated";
 import { SkImage } from "@shopify/react-native-skia";
-import { Backgrdound } from "../background";
+import { Backgrdound } from "../backgrund/background";
 import ImageMaskReverse from "../imagemaskreverse";
 import HologramLayer from "../../component/hologramLayer";
 import GlossLayer from "../../component/glossLayer";
@@ -28,7 +28,6 @@ export const ShaderLayer = memo((props: ShaderLayerProps) => {
     <Backgrdound
       width={props.width}
       height={props.height}
-      borderRadius={props.borderRadius}
       time={props.time}
       shaderEffectRef={props.shaderEffectRef}
     />

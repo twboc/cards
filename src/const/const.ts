@@ -3,6 +3,10 @@ import { GradientPoints } from "../type/type";
 
 export const MODAL_HEIGHT = "50%";
 export const MODAL_BOTTOM_PADDING = 60;
+export const FILL_COLOR = "#FFF";
+
+export const MASK_MODE = "alpha" as const;
+export const MASK_COLOR = "white";
 
 export const zeroShared = {
   value: 0,
