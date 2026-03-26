@@ -36,7 +36,6 @@ interface GestureContainerProps {
   sensorEnabled?: boolean;
   sensorRotationFactor?: number;
   sensorTranslationFactor?: number;
-  isActive?: boolean;
 }
 
 const clamp = (value: number, min: number, max: number) => {
@@ -55,7 +54,6 @@ const GestureContainerComponent = ({
   sensorEnabled = true,
   sensorRotationFactor = 12,
   sensorTranslationFactor = 28,
-  isActive = true,
 }: GestureContainerProps) => {
   const gestureRotateX = useSharedValue(0);
   const gestureRotateY = useSharedValue(0);
@@ -65,12 +63,6 @@ const GestureContainerComponent = ({
 
   const sensorTranslateX = useSharedValue(0);
   const sensorTranslateY = useSharedValue(0);
-
-  const activeShared = useSharedValue(isActive ? 1 : 0);
-
-  useEffect(() => {
-    activeShared.value = isActive ? 1 : 0;
-  }, [activeShared, isActive]);
 
   const motion = useMemo<GestureContainerMotion>(
     () => ({
@@ -121,7 +113,7 @@ const GestureContainerComponent = ({
   ]);
 
   useEffect(() => {
-    if (!isActive || !sensorEnabled) {
+    if (!sensorEnabled) {
       resetMotion();
       return;
     }
@@ -155,7 +147,6 @@ const GestureContainerComponent = ({
       resetMotion();
     };
   }, [
-    isActive,
     maxAngle,
     resetMotion,
     sensorEnabled,
@@ -178,7 +169,6 @@ const GestureContainerComponent = ({
   const gesture = useMemo(
     () =>
       Gesture.Pan()
-        .enabled(isActive)
         .onBegin((event) => {
           gestureRotateX.value = withTiming(
             interpolateRotation(event.y, height, true),
@@ -197,21 +187,10 @@ const GestureContainerComponent = ({
           gestureRotateX.value = withTiming(0, timingConfig);
           gestureRotateY.value = withTiming(0, timingConfig);
         }),
-    [
-      isActive,
-      gestureRotateX,
-      gestureRotateY,
-      height,
-      width,
-      interpolateRotation,
-    ],
+    [gestureRotateX, gestureRotateY, height, width, interpolateRotation],
   );
 
   const outerStyle = useAnimatedStyle(() => {
-    if (!activeShared.value) {
-      return styles.identityTransform;
-    }
-
     const totalRotateX = gestureRotateX.value + sensorRotateX.value;
     const totalRotateY = gestureRotateY.value + sensorRotateY.value;
 
@@ -225,10 +204,6 @@ const GestureContainerComponent = ({
   });
 
   const innerStyle = useAnimatedStyle(() => {
-    if (!activeShared.value) {
-      return styles.identityTransform;
-    }
-
     return {
       transform: [
         { translateX: sensorTranslateX.value },
@@ -241,14 +216,6 @@ const GestureContainerComponent = ({
     () => (typeof children === "function" ? children(motion) : children),
     [children, motion],
   );
-
-  if (!isActive) {
-    return (
-      <Animated.View style={[styles.outer, { width, height }]}>
-        <Animated.View style={styles.inner}>{renderedChildren}</Animated.View>
-      </Animated.View>
-    );
-  }
 
   return (
     <View>
@@ -273,7 +240,6 @@ export const GestureContainer = memo(
     prev.sensorRotationFactor === next.sensorRotationFactor &&
     prev.sensorTranslationFactor === next.sensorTranslationFactor &&
     prev.onRotationChange === next.onRotationChange &&
-    prev.isActive === next.isActive &&
     prev.children === next.children,
 );
 
