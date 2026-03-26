@@ -11,7 +11,10 @@ import {
   DEFAULT_SENSOR_ROTATION_FACTOR,
   DEFAULT_SENSOR_TRANSLATION_FACTOR,
   ROTATION_EPSILON,
+  SENSOR_DEAD_ZONE,
   SENSOR_INTERVAL_MS,
+  SENSOR_SMOOTHING,
+  SENSOR_UPDATE_EPSILON,
   TIMING_CONFIG,
   ZERO,
 } from "../../const/const";
@@ -20,7 +23,13 @@ import GestureContainerProps, {
   GestureContainerMotion,
   UseGestureContainerMotionParams,
 } from "./gesture.type";
-import { clamp, mapToAngle } from "./gesture.util";
+import {
+  applyDeadZone,
+  clamp,
+  mapToAngle,
+  shouldUpdateValue,
+  smoothValue,
+} from "./gesture.util";
 
 export const useGestureContainerMotion = (
   params: UseGestureContainerMotionParams,
@@ -30,6 +39,7 @@ export const useGestureContainerMotion = (
     params.props.sensorRotationFactor ?? DEFAULT_SENSOR_ROTATION_FACTOR;
   const sensorTranslationFactor =
     params.props.sensorTranslationFactor ?? DEFAULT_SENSOR_TRANSLATION_FACTOR;
+  const sensorEnabled = params.props.sensorEnabled ?? true;
 
   const onRotationChangeRef = useRef<GestureContainerProps["onRotationChange"]>(
     params.props.onRotationChange,
@@ -75,7 +85,7 @@ export const useGestureContainerMotion = (
   ]);
 
   useEffect(() => {
-    if (!params.props.sensorEnabled) {
+    if (!sensorEnabled) {
       resetMotion();
       return;
     }
@@ -83,25 +93,96 @@ export const useGestureContainerMotion = (
     setUpdateIntervalForType(SensorTypes.accelerometer, SENSOR_INTERVAL_MS);
 
     const subscription = accelerometer.subscribe(({ x, y }) => {
-      const nextRotateY = clamp(x * sensorRotationFactor, -maxAngle, maxAngle);
-      const nextRotateX = clamp(-y * sensorRotationFactor, -maxAngle, maxAngle);
+      const filteredX = applyDeadZone(x, SENSOR_DEAD_ZONE);
+      const filteredY = applyDeadZone(y, SENSOR_DEAD_ZONE);
 
-      const nextTranslateX = clamp(
-        x * sensorTranslationFactor,
+      const targetRotateY = clamp(
+        filteredX * sensorRotationFactor,
+        -maxAngle,
+        maxAngle,
+      );
+
+      const targetRotateX = clamp(
+        -filteredY * sensorRotationFactor,
+        -maxAngle,
+        maxAngle,
+      );
+
+      const targetTranslateX = clamp(
+        filteredX * sensorTranslationFactor,
         -sensorTranslationFactor,
         sensorTranslationFactor,
       );
 
-      const nextTranslateY = clamp(
-        y * sensorTranslationFactor,
+      const targetTranslateY = clamp(
+        filteredY * sensorTranslationFactor,
         -sensorTranslationFactor,
         sensorTranslationFactor,
       );
 
-      params.sensorRotateX.value = withTiming(nextRotateX, TIMING_CONFIG);
-      params.sensorRotateY.value = withTiming(nextRotateY, TIMING_CONFIG);
-      params.sensorTranslateX.value = withTiming(nextTranslateX, TIMING_CONFIG);
-      params.sensorTranslateY.value = withTiming(nextTranslateY, TIMING_CONFIG);
+      const nextRotateX = smoothValue(
+        params.sensorRotateX.value,
+        targetRotateX,
+        SENSOR_SMOOTHING,
+      );
+
+      const nextRotateY = smoothValue(
+        params.sensorRotateY.value,
+        targetRotateY,
+        SENSOR_SMOOTHING,
+      );
+
+      const nextTranslateX = smoothValue(
+        params.sensorTranslateX.value,
+        targetTranslateX,
+        SENSOR_SMOOTHING,
+      );
+
+      const nextTranslateY = smoothValue(
+        params.sensorTranslateY.value,
+        targetTranslateY,
+        SENSOR_SMOOTHING,
+      );
+
+      if (
+        shouldUpdateValue(
+          params.sensorRotateX.value,
+          nextRotateX,
+          SENSOR_UPDATE_EPSILON,
+        )
+      ) {
+        params.sensorRotateX.value = nextRotateX;
+      }
+
+      if (
+        shouldUpdateValue(
+          params.sensorRotateY.value,
+          nextRotateY,
+          SENSOR_UPDATE_EPSILON,
+        )
+      ) {
+        params.sensorRotateY.value = nextRotateY;
+      }
+
+      if (
+        shouldUpdateValue(
+          params.sensorTranslateX.value,
+          nextTranslateX,
+          SENSOR_UPDATE_EPSILON,
+        )
+      ) {
+        params.sensorTranslateX.value = nextTranslateX;
+      }
+
+      if (
+        shouldUpdateValue(
+          params.sensorTranslateY.value,
+          nextTranslateY,
+          SENSOR_UPDATE_EPSILON,
+        )
+      ) {
+        params.sensorTranslateY.value = nextTranslateY;
+      }
     });
 
     return () => {
@@ -109,7 +190,7 @@ export const useGestureContainerMotion = (
       resetMotion();
     };
   }, [
-    params.props.sensorEnabled,
+    sensorEnabled,
     maxAngle,
     sensorRotationFactor,
     sensorTranslationFactor,
@@ -125,18 +206,15 @@ export const useGestureContainerMotion = (
   }, []);
 
   useAnimatedReaction(
-    () => ({
-      x: params.gestureRotateX.value,
-      y: params.gestureRotateY.value,
-    }),
+    () => [params.gestureRotateX.value, params.gestureRotateY.value] as const,
     (current, previous) => {
       const changed =
         !previous ||
-        Math.abs(current.x - previous.x) > ROTATION_EPSILON ||
-        Math.abs(current.y - previous.y) > ROTATION_EPSILON;
+        Math.abs(current[0] - previous[0]) > ROTATION_EPSILON ||
+        Math.abs(current[1] - previous[1]) > ROTATION_EPSILON;
 
       if (changed && onRotationChangeRef.current) {
-        scheduleOnUI(notifyRotationChange, current.x, current.y);
+        scheduleOnUI(notifyRotationChange, current[0], current[1]);
       }
     },
   );

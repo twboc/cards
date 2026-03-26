@@ -21,3 +21,22 @@ export const mapToAngle = (
 
   return isReverse ? -angle : angle;
 };
+
+export const applyDeadZone = (value: number, deadZone: number) => {
+  "worklet";
+  return Math.abs(value) < deadZone ? ZERO : value;
+};
+
+export const smoothValue = (current: number, target: number, alpha: number) => {
+  "worklet";
+  return current + (target - current) * alpha;
+};
+
+export const shouldUpdateValue = (
+  current: number,
+  next: number,
+  epsilon: number,
+) => {
+  "worklet";
+  return Math.abs(current - next) > epsilon;
+};

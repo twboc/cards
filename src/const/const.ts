@@ -29,4 +29,7 @@ export const RESET_TIMING_CONFIG = { duration: 100 };
 export const PERSPECTIVE = 700;
 export const ZERO = 0;
 export const ROTATION_EPSILON = 0.01;
+export const SENSOR_UPDATE_EPSILON = 0.02;
+export const SENSOR_DEAD_ZONE = 0.015;
+export const SENSOR_SMOOTHING = 0.18;
 export const TIMING_CONFIG = { duration: 100 };
