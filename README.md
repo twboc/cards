@@ -160,57 +160,63 @@ I tried to keep dependencies to a minimum. A few packages were necessary, such a
 <h2 align="center">🤝 Sponsors</h2>
 
 <table align="center">
-  <tr>
-    <td align="center" valign="top">
-      <b><a href="https://www.workdei.biz/" target="_blank">WORKDEI</a></b><br><br>
-      <sub>
-        <a href="https://www.workdei.biz/pl/oferta/generalne-wykonawstwo-inwestycji/" target="_blank">Generalne wykonawstwo inwestycji</a><br>
-        <a href="https://www.workdei.biz/pl/oferta/podwykonawstwo/" target="_blank">Podwykonawstwo budowlane</a><br>
-        <a href="https://www.workdei.biz/pl/oferta/uslugi-budowlane/" target="_blank">Usługi budowlane Poznań</a><br>
-        <a href="https://www.workdei.biz/pl/oferta/nadzor-procesu-budowlanego/" target="_blank">Nadzór budowlany</a><br>
-        <a href="https://www.workdei.biz/pl/oferta/nadzor-procesu-budowlanego/" target="_blank">Nadzór budowlany Poznań</a>
-      </sub>
-    </td>
+<tr>
+<td align="center" valign="top">
 
-    <td align="center" valign="top">
-      <b><a href="https://www.milwicz-architekci.pl/" target="_blank">MILWICZ ARCHITEKCI</a></b><br><br>
-      <sub>
-        <a href="https://www.milwicz-architekci.pl/projekty-gotowe-ma/" target="_blank">Gotowy projekt domu</a><br>
-        <a href="https://www.milwicz-architekci.pl/architekt-poznan/" target="_blank">Architekt Poznań</a><br>
-        <a href="https://www.milwicz-architekci.pl/projekty-indywidualne/" target="_blank">Projekt domu na zamówienie</a><br>
-        <a href="https://www.milwicz-architekci.pl/projekty-indywidualne/" target="_blank">Indywidualny projekt domu</a><br>
-        <a href="https://www.milwicz-architekci.pl/nowoczesna-stodola/" target="_blank">Nowoczesna stodoła</a>
-      </sub>
-    </td>
+<b><a href="https://www.workdei.biz/" target="_blank">WORKDEI</a></b><br><br>
 
-  </tr>
+<sub>
+<a href="https://www.workdei.biz/pl/oferta/generalne-wykonawstwo-inwestycji/" target="_blank">Generalne wykonawstwo inwestycji</a><br>
+<a href="https://www.workdei.biz/pl/oferta/podwykonawstwo/" target="_blank">Podwykonawstwo budowlane</a><br>
+<a href="https://www.workdei.biz/pl/oferta/uslugi-budowlane/" target="_blank">Usługi budowlane Poznań</a><br>
+<a href="https://www.workdei.biz/pl/oferta/nadzor-procesu-budowlanego/" target="_blank">Nadzór budowlany</a>
+</sub>
 
-  <tr>
-    <td align="center" valign="top">
-      <b><a href="https://www.drl-clinic.pl/" target="_blank">DRL-CLINIC</a></b><br><br>
-      <sub>
-        <a href="https://www.drl-clinic.pl/" target="_blank">Dentysta Kraków</a><br>
-        <a href="https://www.drl-clinic.pl/uslugi/ortodoncja" target="_blank">Ortodonta Kraków</a><br>
-        <a href="https://www.drl-clinic.pl/uslugi/implanty" target="_blank">Implanty Kraków</a><br>
-        <a href="https://www.drl-clinic.pl/uslugi/cyfrowe-projektowanie-usmiechu" target="_blank">Metamorfoza uśmiechu</a><br>
-        <a href="https://www.drl-clinic.pl/uslugi/stomatologia-estetyczna" target="_blank">Stomatologia estetyczna</a>
-      </sub>
-    </td>
+</td>
 
-    <td align="center" valign="top">
-      <b><a href="https://www.maxdent.pl/" target="_blank">MAXDENT</a></b><br><br>
-      <sub>
-        <a href="https://www.maxdent.pl/uslugi/stomatologia-laserowa/" target="_blank">Leczenie laserowe Wrocław</a><br>
-        <a href="https://www.maxdent.pl/dlaczego-my/leczenie-pod-mikroskopem/" target="_blank">Leczenie pod mikroskopem</a><br>
-        <a href="https://www.maxdent.pl/uslugi/ortodoncja-ortodonta-wroclaw/" target="_blank">Ortodonta Wrocław</a><br>
-        <a href="https://www.maxdent.pl/uslugi/implanty-zebow/" target="_blank">Implanty Wrocław</a><br>
-        <a href="https://www.maxdent.pl/uslugi/leczenie-kanalowe/" target="_blank">Leczenie kanałowe</a>
-      </sub>
-    </td>
+<td align="center" valign="top">
 
-  </tr>
+<b><a href="https://www.milwicz-architekci.pl/" target="_blank">MILWICZ ARCHITEKCI</a></b><br><br>
+
+<sub>
+<a href="https://www.milwicz-architekci.pl/projekty-gotowe-ma/" target="_blank">Gotowy projekt domu</a><br>
+<a href="https://www.milwicz-architekci.pl/architekt-poznan/" target="_blank">Architekt Poznań</a><br>
+<a href="https://www.milwicz-architekci.pl/projekty-indywidualne/" target="_blank">Projekt domu na zamówienie</a><br>
+<a href="https://www.milwicz-architekci.pl/nowoczesna-stodola/" target="_blank">Nowoczesna stodoła</a>
+</sub>
+
+</td>
+</tr>
+
+<tr>
+<td align="center" valign="top">
+
+<b><a href="https://www.drl-clinic.pl/" target="_blank">DRL-CLINIC</a></b><br><br>
+
+<sub>
+<a href="https://www.drl-clinic.pl/" target="_blank">Dentysta Kraków</a><br>
+<a href="https://www.drl-clinic.pl/uslugi/ortodoncja" target="_blank">Ortodonta Kraków</a><br>
+<a href="https://www.drl-clinic.pl/uslugi/implanty" target="_blank">Implanty Kraków</a><br>
+<a href="https://www.drl-clinic.pl/uslugi/cyfrowe-projektowanie-usmiechu" target="_blank">Metamorfoza uśmiechu</a>
+</sub>
+
+</td>
+
+<td align="center" valign="top">
+
+<b><a href="https://www.maxdent.pl/" target="_blank">MAXDENT</a></b><br><br>
+
+<sub>
+<a href="https://www.maxdent.pl/uslugi/stomatologia-laserowa/" target="_blank">Leczenie laserowe Wrocław</a><br>
+<a href="https://www.maxdent.pl/dlaczego-my/leczenie-pod-mikroskopem/" target="_blank">Leczenie pod mikroskopem</a><br>
+<a href="https://www.maxdent.pl/uslugi/ortodoncja-ortodonta-wroclaw/" target="_blank">Ortodonta Wrocław</a><br>
+<a href="https://www.maxdent.pl/uslugi/implanty-zebow/" target="_blank">Implanty Wrocław</a>
+</sub>
+
+</td>
+</tr>
 </table>
 
 <p align="center">
-  <sub>💛 Thanks to our partners for supporting this project</sub>
+<sub>💛 Thanks to our partners for supporting this project</sub>
 </p>
