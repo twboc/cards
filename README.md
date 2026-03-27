@@ -109,7 +109,7 @@
       <a href="https://github.com/twboc/cards/blob/main/demo/08.%20Squirtle.gif">
         <img src="https://github.com/twboc/cards/raw/main/demo/08.%20Squirtle.gif" width="180" alt="Squirtle">
       </a><br>
-      <sub><b>#008</b> Chardizard Big</sub>
+      <sub><b>#008</b> Squirtle</sub>
     </td>
     <td align="center">
       <a href="https://github.com/twboc/cards/blob/main/demo/09.%20Marill.gif">
