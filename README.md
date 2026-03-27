@@ -2,6 +2,8 @@
 
 Pokemon Cards renderer demo. Hologram, gloss, background shader, RGB split, inner and outer hologram mask, different types of image outlines (white, hologram, masked holo gif).
 
+[![Watch the video](https://img.youtube.com/vi/VbxFiI15JMs/0.jpg)](https://www.youtube.com/shorts/VbxFiI15JMs)
+
 I wanted to show how would a highly optimised version of react-native-skia demo would look like. Most of the examples on the internet used useStete to calculate the shader timer instead of useClock. Most of them had poorly optimised component rendering.
 
 Shaders
