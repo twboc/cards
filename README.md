@@ -66,8 +66,8 @@
       <sub><b>#001</b> Pikachu</sub>
     </td>
     <td align="center">
-      <a href="https://github.com/twboc/cards/blob/main/demo/02.%20Blbasaur.gif">
-        <img src="https://github.com/twboc/cards/raw/main/demo/02.%20Blbasaur.gif" width="180" alt="Blbasaur">
+      <a href="https://github.com/twboc/cards/blob/main/demo/02.%20Bulbasaur.gif">
+        <img src="https://github.com/twboc/cards/raw/main/demo/02.%20Bulbasaur.gif" width="180" alt="Bulbasaur">
       </a><br>
       <sub><b>#002</b> Blbasaur</sub>
     </td>
@@ -106,8 +106,8 @@
       <sub><b>#007</b> Pikachu</sub>
     </td>
     <td align="center">
-      <a href="https://github.com/twboc/cards/blob/main/demo/08.%20Chardizard%20Big.gif">
-        <img src="https://github.com/twboc/cards/raw/main/demo/08.%20Chardizard%20Big.gif" width="180" alt="Chardizard Big">
+      <a href="https://github.com/twboc/cards/blob/main/demo/08.%20Squirtle.gif">
+        <img src="https://github.com/twboc/cards/raw/main/demo/08.%20Squirtle.gif" width="180" alt="Squirtle">
       </a><br>
       <sub><b>#008</b> Chardizard Big</sub>
     </td>
@@ -142,6 +142,10 @@
 ## About the project
 
 I wanted to show what a highly optimized version of a `react-native-skia` demo could look like. Many examples online use `useState` to drive shader timing instead of `useClock`, and a lot of them suffer from unnecessary component re-renders.
+
+### OPTIMISATION
+
+I wanted to do a deep dive on react native optimisation. This project implements many techniques that allow us to render multiple comonenents with animations without a stutter.
 
 ### Shaders
 
