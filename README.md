@@ -16,7 +16,7 @@
             style="max-width: 420px; border-radius: 14px;"
           />
           <img
-            src="https://upload.wikimedia.org/wikipedia/commons/7/75/Video-Play-Button-Icon.svg"
+            src="https://github.com/twboc/cards/raw/main/demo/play-button.png"
             alt="Play button"
             width="72"
             style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.9;"
@@ -36,7 +36,7 @@
             style="max-width: 420px; border-radius: 14px;"
           />
           <img
-            src="https://upload.wikimedia.org/wikipedia/commons/7/75/Video-Play-Button-Icon.svg"
+            src="https://github.com/twboc/cards/raw/main/demo/play-button.png"
             alt="Play button"
             width="72"
             style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.9;"
