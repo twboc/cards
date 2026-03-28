@@ -324,7 +324,7 @@
         {
           "name": "--path <path>",
           "description": "Path to the React Native project root.",
-          "default": "/Users/hubertsobkow/projects/fix/cards/ios"
+          "default": "/Users/hubertsobkow/projects/fix/cards"
         },
         {
           "name": "--platform <string>",

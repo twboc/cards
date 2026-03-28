@@ -22,15 +22,16 @@ public:
 
 protected:
   NativeWorkletsModuleCxxSpec(std::shared_ptr<CallInvoker> jsInvoker) : TurboModule(std::string{NativeWorkletsModuleCxxSpec::kModuleName}, jsInvoker) {
-    methodMap_["installTurboModule"] = MethodMetadata {.argCount = 0, .invoker = __installTurboModule};
+    methodMap_["installTurboModule"] = MethodMetadata {.argCount = 1, .invoker = __installTurboModule};
   }
   
 private:
-  static jsi::Value __installTurboModule(jsi::Runtime &rt, TurboModule &turboModule, const jsi::Value* /*args*/, size_t /*count*/) {
+  static jsi::Value __installTurboModule(jsi::Runtime &rt, TurboModule &turboModule, const jsi::Value* args, size_t count) {
     static_assert(
-      bridging::getParameterCount(&T::installTurboModule) == 1,
-      "Expected installTurboModule(...) to have 1 parameters");
-    return bridging::callFromJs<bool>(rt, &T::installTurboModule,  static_cast<NativeWorkletsModuleCxxSpec*>(&turboModule)->jsInvoker_, static_cast<T*>(&turboModule));
+      bridging::getParameterCount(&T::installTurboModule) == 2,
+      "Expected installTurboModule(...) to have 2 parameters");
+    return bridging::callFromJs<bool>(rt, &T::installTurboModule,  static_cast<NativeWorkletsModuleCxxSpec*>(&turboModule)->jsInvoker_, static_cast<T*>(&turboModule),
+      count <= 0 ? throw jsi::JSError(rt, "Expected argument in position 0 to be passed") : args[0].asBool());
   }
 };
 

@@ -333,6 +333,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "flex-start",
     alignContent: "flex-start",
+    backgroundColor: "#FFF",
   },
 
   wrapper: {
