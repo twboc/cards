@@ -44,6 +44,18 @@ export const HOLO_VAPORWAVE_COLORS = [
 ] as Color[];
 
 export const HOLO_NEON_COLORS = [
+  "#ff0040",
+  "#ff00ff",
+  "#9d00ff",
+  "#5b00ff",
+  "#003cff",
+  "#00b7ff",
+  "#00ffd0",
+  "#39ff14",
+  "#fff700",
+] as Color[];
+
+export const RADIATION_COLORS = [
   "#00aaff",
   "#00d4ff",
   "#00ffd0",
@@ -51,6 +63,7 @@ export const HOLO_NEON_COLORS = [
   "#00ff5e",
   "#39ff14",
   "#aaff00",
+  "#fff700",
 ] as Color[];
 
 export type HoloColorPalette = readonly Color[];
@@ -64,4 +77,5 @@ export const HOLO_COLOR_OPTIONS: readonly {
   { label: "Fire", value: HOLO_FIRE_COLORS },
   { label: "Vaporwave", value: HOLO_VAPORWAVE_COLORS },
   { label: "Hyper Neon", value: HOLO_NEON_COLORS },
+  { label: "Radiation", value: RADIATION_COLORS },
 ];
