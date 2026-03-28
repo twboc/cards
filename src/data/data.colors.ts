@@ -44,15 +44,13 @@ export const HOLO_VAPORWAVE_COLORS = [
 ] as Color[];
 
 export const HOLO_NEON_COLORS = [
-  "#ff0040",
-  "#ff00ff",
-  "#9d00ff",
-  "#5b00ff",
-  "#003cff",
-  "#00b7ff",
+  "#00aaff",
+  "#00d4ff",
   "#00ffd0",
+  "#00ff9a",
+  "#00ff5e",
   "#39ff14",
-  "#fff700",
+  "#aaff00",
 ] as Color[];
 
 export type HoloColorPalette = readonly Color[];
