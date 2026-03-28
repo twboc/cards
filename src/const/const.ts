@@ -44,7 +44,7 @@ export const DEFAULT_MAX_ANGLE = 15;
 export const DEFAULT_SENSOR_ENABLED = true;
 export const DEFAULT_SENSOR_ROTATION_FACTOR = 12;
 export const DEFAULT_SENSOR_TRANSLATION_FACTOR =
-  Platform.OS == "android" ? 4 : 28;
+  Platform.OS == "android" ? 0 : 28;
 export const DEFAULT_IS_ACTIVE = true;
 export const SENSOR_INTERVAL_MS = Platform.OS == "android" ? 20 : 40;
 export const RESET_TIMING_CONFIG = { duration: 100 };
@@ -55,3 +55,8 @@ export const SENSOR_UPDATE_EPSILON = 0.02;
 export const SENSOR_DEAD_ZONE = 0.015;
 export const SENSOR_SMOOTHING = 0.18;
 export const TIMING_CONFIG = { duration: 100 };
+
+// overrides
+// My android phone sensor tilted the card back and to the side
+export const TRANSFORM_OVERRIDE_X = Platform.OS == "android" ? 9 : 0;
+export const TRANSFORM_OVERRIDE_Y = Platform.OS == "android" ? 4 : 0;

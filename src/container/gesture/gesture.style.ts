@@ -1,6 +1,10 @@
 import { useMemo } from "react";
 import { useAnimatedStyle, SharedValue } from "react-native-reanimated";
-import { PERSPECTIVE } from "../../const/const";
+import {
+  PERSPECTIVE,
+  TRANSFORM_OVERRIDE_X,
+  TRANSFORM_OVERRIDE_Y,
+} from "../../const/const";
 import { StyleSheet, ViewStyle } from "react-native";
 
 export const useGestureContainerSizeStyle = (params: {
@@ -26,9 +30,13 @@ export const useGestureContainerAnimatedStyles = (params: {
 }) => {
   const outerStyle = useAnimatedStyle(() => {
     const totalRotateX =
-      params.gestureRotateX.value + params.sensorRotateX.value;
+      params.gestureRotateX.value +
+      params.sensorRotateX.value +
+      TRANSFORM_OVERRIDE_X;
     const totalRotateY =
-      params.gestureRotateY.value + params.sensorRotateY.value;
+      params.gestureRotateY.value +
+      params.sensorRotateY.value +
+      TRANSFORM_OVERRIDE_Y;
 
     return {
       transform: [
