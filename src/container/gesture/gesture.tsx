@@ -43,13 +43,12 @@ const GestureContainerComponent = (props: GestureContainerProps) => {
     sensorTranslateY,
   });
 
-  const renderedChildren = useMemo(
-    () =>
-      typeof props.children === "function"
-        ? props.children(motion)
-        : props.children,
-    [props.children, motion],
-  );
+  const renderedChildren = useMemo(() => {
+    console.log("called memeo");
+    return typeof props.children === "function"
+      ? props.children(motion)
+      : props.children;
+  }, [props.children, motion]);
 
   return (
     <GestureDetector gesture={gesture}>

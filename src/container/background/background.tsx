@@ -44,7 +44,8 @@ export const Backgrdound = memo(
   (prev, next) =>
     prev.width === next.width &&
     prev.height === next.height &&
-    prev.shaderEffectRef === next.shaderEffectRef,
+    prev.shaderEffectRef === next.shaderEffectRef &&
+    prev.time === next.time,
 );
 
 export default Backgrdound;

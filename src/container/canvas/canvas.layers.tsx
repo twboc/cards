@@ -1,7 +1,7 @@
 import React, { memo } from "react";
 import { SharedValue, DerivedValue } from "react-native-reanimated";
 import { SkImage } from "@shopify/react-native-skia";
-import { Backgrdound } from "../backgrund/background";
+import { Backgrdound } from "../background/background";
 import ImageMaskReverse from "../imagemaskreverse/imagemaskreverse";
 import HologramLayer from "../../component/hologram/hologram";
 import Gloss from "../../component/gloss/gloss";
