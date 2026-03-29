@@ -69,7 +69,7 @@
       <a href="https://github.com/twboc/cards/blob/main/demo/02.%20Bulbasaur.gif">
         <img src="https://github.com/twboc/cards/raw/main/demo/02.%20Bulbasaur.gif" width="180" alt="Bulbasaur">
       </a><br>
-      <sub><b>#002</b> Blbasaur</sub>
+      <sub><b>#002</b> Bulbasaur</sub>
     </td>
     <td align="center">
       <a href="https://github.com/twboc/cards/blob/main/demo/03.%20Jolteon.gif">
